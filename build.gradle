@@ -1,6 +1,6 @@
 plugins {
     id 'maven-publish'
-    id "fabric-loom" version "1.6.12"
+    id "fabric-loom" version "1.7-SNAPSHOT"
     id 'org.jetbrains.kotlin.jvm'
 }
 
@@ -13,6 +13,7 @@ base {
 
 repositories {
     mavenCentral()
+    maven { name = "Modrinth"; url = "https://api.modrinth.com/maven" }
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -25,6 +26,7 @@ repositories {
         url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
         content {
             includeGroup("software.bernie.geckolib")
+            includeGroup("com.eliotlash.mclib")
         }
     }
 
@@ -46,7 +48,11 @@ dependencies {
     // lombok
     implementation "org.projectlombok:lombok:1.18.30"
 
-    modImplementation "maven.modrinth:tonekomod:${project.toneko_version}"
+    def localToNekoJar = file("../toNeko/fabric/build/libs/${project.toneko_jar}")
+    if (!localToNekoJar.exists()) {
+        throw new GradleException("Missing the Minecraft 1.20.1 toNeko backport at ${localToNekoJar}. Build the sibling toNeko repository first.")
+    }
+    modImplementation files(localToNekoJar)
     modImplementation "maven.modrinth:ctlibmod:0.1.13"
 
     modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
@@ -64,9 +70,7 @@ loom {
 }
 
 fabricApi {
-    configureDataGeneration() {
-        client = true
-    }
+    configureDataGeneration()
 }
 
 processResources {
