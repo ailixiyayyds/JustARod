@@ -16,17 +16,20 @@ class LoliNekoRenderer(renderManager: EntityRendererFactory.Context) : NekoRende
 
 
     override fun actuallyRender(
-        poseStack: MatrixStack?,
-        entity: LoliNekoEntity?,
-        model: BakedGeoModel?,
-        renderType: RenderLayer?,
-        bufferSource: VertexConsumerProvider?,
-        buffer: VertexConsumer?,
+        poseStack: MatrixStack,
+        entity: LoliNekoEntity,
+        model: BakedGeoModel,
+        renderType: RenderLayer,
+        bufferSource: VertexConsumerProvider,
+        buffer: VertexConsumer,
         isReRender: Boolean,
         partialTick: Float,
         packedLight: Int,
         packedOverlay: Int,
-        colour: Int
+        red: Float,
+        green: Float,
+        blue: Float,
+        alpha: Float
     ) {
         super.actuallyRender(
             poseStack,
@@ -39,13 +42,16 @@ class LoliNekoRenderer(renderManager: EntityRendererFactory.Context) : NekoRende
             partialTick,
             packedLight,
             packedOverlay,
-            colour
+            red,
+            green,
+            blue,
+            alpha
         )
 
 
-        val head: Optional<GeoBone?>? = model?.getBone("Head")
+        val head: Optional<GeoBone> = model.getBone("Head")
 
-        if (head?.isPresent == true) {
+        if (head.isPresent) {
             head.get().setScaleX(1.5f)
             head.get().setScaleY(1.5f)
             head.get().setScaleZ(1.5f)

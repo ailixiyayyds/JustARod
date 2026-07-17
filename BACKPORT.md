@@ -33,6 +33,8 @@ Completed source groups:
   modifier APIs.
 - JustARod custom item components now use stable `ItemStack` NBT keys, with
   shared Kotlin and Java accessors for save and packet compatibility.
+- Core entities, tracked data, AI goals, GeckoLib animation controllers, and
+  entity renderers now use their Minecraft 1.20.1/GeckoLib 4.4 interfaces.
 
 Minecraft 1.20.1 has no generic jump-strength or scale entity attributes.
 The associated jump/scale modifiers are temporarily inactive until equivalent

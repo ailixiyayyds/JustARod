@@ -39,9 +39,9 @@ class LoliNekoEntity(private val type: EntityType<LoliNekoEntity>, world: World)
         dataTracker.set(SHOWING_AGE, age)
     }
 
-    override fun initDataTracker(builder: DataTracker.Builder) {
-        super.initDataTracker(builder)
-        builder.add(SHOWING_AGE,18)
+    override fun initDataTracker() {
+        super.initDataTracker()
+        dataTracker.startTracking(SHOWING_AGE, 18)
     }
     override fun writeCustomDataToNbt(compound: NbtCompound) {
         super.writeCustomDataToNbt(compound)

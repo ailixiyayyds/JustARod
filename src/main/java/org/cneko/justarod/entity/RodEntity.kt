@@ -17,12 +17,14 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.particle.ParticleTypes
+import net.minecraft.recipe.Ingredient
 import net.minecraft.registry.tag.FluidTags
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.TimeHelper
 import net.minecraft.world.LocalDifficulty
+import net.minecraft.world.EntityView
 import net.minecraft.world.ServerWorldAccess
 import net.minecraft.world.World
 import org.cneko.justarod.genetics.RodGenetics
@@ -34,12 +36,12 @@ import org.cneko.toneko.common.mod.entities.NekoEntity
 import org.cneko.toneko.common.mod.items.ToNekoItems
 import org.cneko.toneko.common.mod.misc.mixininterface.SlowTickable
 import software.bernie.geckolib.animatable.GeoEntity
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
-import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.AnimationController.AnimationStateHandler
-import software.bernie.geckolib.animation.AnimationState
-import software.bernie.geckolib.animation.RawAnimation
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
+import software.bernie.geckolib.core.animation.AnimatableManager
+import software.bernie.geckolib.core.animation.AnimationController
+import software.bernie.geckolib.core.animation.AnimationController.AnimationStateHandler
+import software.bernie.geckolib.core.animation.AnimationState
+import software.bernie.geckolib.core.animation.RawAnimation
 import software.bernie.geckolib.constant.DefaultAnimations
 import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.*
@@ -54,6 +56,8 @@ class RodEntity(private val entityType:EntityType<RodEntity>, world: World):Tame
     private val defSpeed:Double = 0.8
     private val slowSpeed:Double = 0.6
     private var slowTickCount = 0
+
+    override fun method_48926(): EntityView = world
 
     // ========== 遗传学相关 ==========
     private var genome: Genome = Genome()
@@ -108,8 +112,8 @@ class RodEntity(private val entityType:EntityType<RodEntity>, world: World):Tame
         )
         goalSelector.add(2, MeleeAttackGoal(this, defSpeed, true))
         goalSelector.add(8, LookAroundGoal(this))
-        goalSelector.add(2,TemptGoal(this, defSpeed, {stack->stack.isOf(Items.END_ROD)||stack.isOf(JRBlocks.GOLDEN_LEAVES.asItem())},false))
-        goalSelector.add(1,FollowOwnerGoal(this, defSpeed, 10.0f, 2.0f))
+        goalSelector.add(2, TemptGoal(this, defSpeed, Ingredient.ofItems(Items.END_ROD, JRBlocks.GOLDEN_LEAVES.asItem()), false))
+        goalSelector.add(1, FollowOwnerGoal(this, defSpeed, 10.0f, 2.0f, false))
 
 
         targetSelector.add(2, AttackWithOwnerGoal(this))
@@ -147,9 +151,9 @@ class RodEntity(private val entityType:EntityType<RodEntity>, world: World):Tame
 
     override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar?) {
         controllers!!.add(AnimationController<RodEntity>(this, 20, AnimationStateHandler { state: AnimationState<*>? ->
-            if (this.pose == EntityPose.SWIMMING && !this.isInFluid) {
+            if (this.pose == EntityPose.SWIMMING && !this.isTouchingWater) {
                 return@AnimationStateHandler state!!.setAndContinue(DefaultAnimations.CRAWL)
-            } else if (this.isInFluid && this.isSubmergedIn(FluidTags.WATER)) {
+            } else if (this.isTouchingWater && this.isSubmergedIn(FluidTags.WATER)) {
                 return@AnimationStateHandler if (state!!.isMoving) state.setAndContinue(DefaultAnimations.SWIM) else state.setAndContinue(
                     DefaultAnimations.CRAWL
                 )
@@ -266,9 +270,6 @@ class RodEntity(private val entityType:EntityType<RodEntity>, world: World):Tame
         }
         if (damageSource?.attacker is NekoEntity){
             // 变大
-            this.getAttributeInstance(EntityAttributes.GENERIC_SCALE)?.let {
-                it.baseValue = it.baseValue + 0.2
-            }
             this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)?.let {
                 it.baseValue = it.baseValue + 2.0
             }
@@ -283,13 +284,14 @@ class RodEntity(private val entityType:EntityType<RodEntity>, world: World):Tame
         world: ServerWorldAccess,
         difficulty: LocalDifficulty,
         reason: SpawnReason,
-        entityData: EntityData?
+        entityData: EntityData?,
+        entityNbt: NbtCompound?
     ): EntityData? {
         val g1 = Genome.generateFallbackGamete(random, RodGenetics.KARYOTYPE)
         val g2 = Genome.generateFallbackGamete(random, RodGenetics.KARYOTYPE)
         genome = Genome.combine(g1, g2, RodGenetics.KARYOTYPE)
         expressTraits()
-        return super.initialize(world, difficulty, reason, entityData)
+        return super.initialize(world, difficulty, reason, entityData, entityNbt)
     }
 
     // ========== 基因值查询（供渲染/效果使用） ==========
@@ -303,24 +305,24 @@ class RodEntity(private val entityType:EntityType<RodEntity>, world: World):Tame
 
     private fun tryTame(player: PlayerEntity) {
         ownerUuid = player.uuid
-        setTamed(true,true)
+        setTamed(true)
+        updateTamedAttributes()
         setOwner(player)
         target = null
         isSitting = false
     }
 
-    override fun updateAttributesForTamed() {
-        super.updateAttributesForTamed()
+    private fun updateTamedAttributes() {
         getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)?.baseValue = 40.0
         // 添加移动速度调整
         getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)?.baseValue = defSpeed
     }
-    override fun initDataTracker(builder: DataTracker.Builder?) {
-        super.initDataTracker(builder)
-        builder?.add(ANGER_TIME,0)
-        builder?.add(LENGTH_BONUS, 0.0f)
-        builder?.add(WIDTH_BONUS, 0.0f)
-        builder?.add(ORGASM_INTENSITY, 1.0f)
+    override fun initDataTracker() {
+        super.initDataTracker()
+        dataTracker.startTracking(ANGER_TIME, 0)
+        dataTracker.startTracking(LENGTH_BONUS, 0.0f)
+        dataTracker.startTracking(WIDTH_BONUS, 0.0f)
+        dataTracker.startTracking(ORGASM_INTENSITY, 1.0f)
     }
 
     override fun writeCustomDataToNbt(nbt: NbtCompound) {

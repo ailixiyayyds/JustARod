@@ -21,10 +21,10 @@ import org.cneko.justarod.entity.ai.SuckMilkGoal
 import org.cneko.justarod.item.JRItems.Companion.BYT
 import org.cneko.toneko.common.mod.entities.INeko
 import org.cneko.toneko.common.mod.entities.NekoEntity
-import software.bernie.geckolib.animation.AnimatableManager
-import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.PlayState
-import software.bernie.geckolib.animation.RawAnimation
+import software.bernie.geckolib.core.animation.AnimatableManager
+import software.bernie.geckolib.core.animation.AnimationController
+import software.bernie.geckolib.core.`object`.PlayState
+import software.bernie.geckolib.core.animation.RawAnimation
 import software.bernie.geckolib.constant.DefaultAnimations
 import java.util.function.Predicate
 
@@ -55,9 +55,9 @@ open class SeeeeexNekoEntity(private val type: EntityType<SeeeeexNekoEntity>, wo
         this.goalSelector.add(5, suckMilkGoal)
     }
 
-    override fun initDataTracker(builder: DataTracker.Builder) {
-        super.initDataTracker(builder)
-        builder.add(SEXUAL_DESIRE_ID, 20)
+    override fun initDataTracker() {
+        super.initDataTracker()
+        dataTracker.startTracking(SEXUAL_DESIRE_ID, 20)
     }
 
     override fun canMate(other: INeko?): Boolean {
@@ -90,7 +90,7 @@ open class SeeeeexNekoEntity(private val type: EntityType<SeeeeexNekoEntity>, wo
             this.addStatusEffect(StatusEffectInstance(StatusEffects.WEAKNESS, 3000, 0))
             mate.entity.sendMessage(Text.of("§a你怀孕了！"))
             // 获取自己的效果
-            val effects = this.statusEffects.filter { !it.effectType.value().isBeneficial }
+            val effects = this.statusEffects.filter { !it.effectType.isBeneficial }
             if (effects.isNotEmpty()) {
                 // 添加到对方的
                 for (effect in effects) {
@@ -98,13 +98,13 @@ open class SeeeeexNekoEntity(private val type: EntityType<SeeeeexNekoEntity>, wo
                 }
             }
             // 如果自己有艾滋，就添加到对方
-            if (effects.stream().anyMatch { it -> it.effectType.value().equals(JREffects.AIDS_EFFECT) }){
+            if (effects.stream().anyMatch { it -> it.effectType == JREffects.AIDS_EFFECT }){
                 if (mate.aids <= 0){
                     mate.aids = 1
                 }
             }
             // 如果有HPV，对方无免疫就添加
-            if (effects.stream().anyMatch { it -> it.effectType.value().equals(JREffects.HPV_EFFECT) }){
+            if (effects.stream().anyMatch { it -> it.effectType == JREffects.HPV_EFFECT }){
                 if (!mate.isImmune2HPV){
                     mate.isImmune2HPV = true
                 }
@@ -137,8 +137,8 @@ open class SeeeeexNekoEntity(private val type: EntityType<SeeeeexNekoEntity>, wo
         controllers?.add(AnimationController(this, 20) { state ->
             when {
                 this.isMasturbation -> state.setAndContinue(RawAnimation.begin().thenLoop("jr.mb"))
-                this.pose == EntityPose.SWIMMING && !this.isInFluid -> state.setAndContinue(DefaultAnimations.CRAWL)
-                this.isInFluid && this.isSubmergedIn(FluidTags.WATER) ->
+                this.pose == EntityPose.SWIMMING && !this.isTouchingWater -> state.setAndContinue(DefaultAnimations.CRAWL)
+                this.isTouchingWater && this.isSubmergedIn(FluidTags.WATER) ->
                     if (state.isMoving) state.setAndContinue(DefaultAnimations.SWIM)
                     else state.setAndContinue(DefaultAnimations.CRAWL)
                 !state.isMoving ->
@@ -161,7 +161,7 @@ open class SeeeeexNekoEntity(private val type: EntityType<SeeeeexNekoEntity>, wo
 
     override fun slowTick(){
         super.slowTick()
-        if (!world.isClient()) {
+        if (!world.isClient) {
             sexualDesire = sexualDesire
             sexualIntercourseGoal?.slowTick()
             this.sexualSlowTick(this)

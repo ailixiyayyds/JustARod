@@ -7,8 +7,6 @@ import net.minecraft.entity.boss.BossBar
 import net.minecraft.entity.boss.WitherEntity
 import net.minecraft.entity.boss.dragon.EnderDragonEntity
 import net.minecraft.entity.boss.dragon.EnderDragonPart
-import net.minecraft.entity.data.DataTracker
-import net.minecraft.entity.data.TrackedDataHandlerRegistry
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.mob.GhastEntity
 import net.minecraft.entity.mob.MobEntity
@@ -30,8 +28,8 @@ import org.cneko.justarod.damage.JRDamageTypes
 import org.cneko.justarod.entity.JREntities.ICED_TEA_PROJECTILE
 import org.cneko.justarod.item.JRItems.Companion.ICED_TEA
 import software.bernie.geckolib.animatable.GeoEntity
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
+import software.bernie.geckolib.core.animation.AnimatableManager
 import software.bernie.geckolib.util.GeckoLibUtil
 
 /*
@@ -148,10 +146,6 @@ class IcedTeaProjectileEntity : ThrownItemEntity, GeoEntity {
 
     override fun getAnimatableInstanceCache(): AnimatableInstanceCache {
         return cache
-    }
-
-    override fun initDataTracker(builder: DataTracker.Builder?) {
-        super.initDataTracker(builder)
     }
 
 }
