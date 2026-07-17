@@ -7,13 +7,13 @@ import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.registry.Registries
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.world.World
 import org.cneko.justarod.effect.JREffects
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 /*
 事实上没人可以把这个塞进去，哪怕扩张有多厉害
@@ -43,12 +43,12 @@ class GiantRodItem: OtherUsedItem(Settings().maxCount(1).maxDamage(1000).compone
     }
 
     override fun appendTooltip(
-        stack: ItemStack?,
-        context: TooltipContext?,
-        tooltip: MutableList<Text>?,
-        type: TooltipType?
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
     ) {
-        super.appendTooltip(stack, context, tooltip, type)
+        super.appendTooltip(stack, world, tooltip, context)
         tooltip?.add(Text.translatable("item.justarod.giant_rod.tooltip"))
     }
 

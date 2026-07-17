@@ -1,7 +1,7 @@
 package org.cneko.justarod.item.electric
 
 import net.minecraft.item.ItemStack
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 /*
 这这这已经不是人可以承受的了，我我我我至少承受不住

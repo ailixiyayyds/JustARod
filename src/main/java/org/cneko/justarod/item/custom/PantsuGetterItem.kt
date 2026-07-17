@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 class PantsuGetterItem(settings: Settings) : Item(settings) {
 

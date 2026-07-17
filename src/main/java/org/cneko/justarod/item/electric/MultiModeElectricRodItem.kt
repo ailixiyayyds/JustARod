@@ -2,12 +2,12 @@ package org.cneko.justarod.item.electric
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 /*
 很智能的呢，多种模式任你选择~
@@ -52,12 +52,12 @@ abstract class MultiModeSelfUsedElectricRodItem(settings:Settings): SelfUsedElec
     }
 
     override fun appendTooltip(
-        stack: ItemStack?,
-        context: TooltipContext?,
-        tooltip: MutableList<Text>?,
-        type: TooltipType?
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
     ) {
-        super.appendTooltip(stack, context, tooltip, type)
+        super.appendTooltip(stack, world, tooltip, context)
         stack?.let {
             val mode = getTranslatableMode(getMode(stack)).string
             tooltip?.add(Text.translatable("item.justarod.multi_mode_rods.current_mode", mode))

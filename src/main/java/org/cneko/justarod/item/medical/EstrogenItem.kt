@@ -5,8 +5,7 @@ import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipData
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipData
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
@@ -46,7 +45,7 @@ class EstrogenItem(settings: Settings): MedicalItem(settings) {
 
     override fun getTooltipData(stack: ItemStack): Optional<TooltipData> {
         return Optional.of(
-            ChemicalStructureTooltipData(Identifier.of("justarod", "textures/tooltip/estradiol.png"))
+            ChemicalStructureTooltipData(Identifier("justarod", "textures/tooltip/estradiol.png"))
         )
     }
 

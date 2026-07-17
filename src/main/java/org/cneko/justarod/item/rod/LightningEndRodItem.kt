@@ -6,11 +6,11 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.world.World
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 /*
 毕竟是铜做的，多少带点毒吧
@@ -40,12 +40,12 @@ class LightningEndRodItem: SelfUsedItem(Settings().maxCount(1).maxDamage(2000).c
     }
 
     override fun appendTooltip(
-        stack: ItemStack?,
-        context: TooltipContext?,
-        tooltip: MutableList<Text>?,
-        type: TooltipType?
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
     ) {
-        super.appendTooltip(stack, context, tooltip, type)
+        super.appendTooltip(stack, world, tooltip, context)
         tooltip?.add(Text.translatable("item.justarod.lightning_end_rod.tooltip"))
     }
 }

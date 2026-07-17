@@ -80,7 +80,7 @@ class MateScreen(val nekoEntity: NekoEntity) : Screen(Text.empty()), INekoScreen
         return false
     }
 
-    override fun renderBackground(context: DrawContext?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderBackground(context: DrawContext) {
         // 不渲染背景
     }
 

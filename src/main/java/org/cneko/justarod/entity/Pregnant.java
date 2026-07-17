@@ -659,10 +659,10 @@ public interface Pregnant{
             boolean hasPantsu = !legStack.isEmpty() && legStack.getItem() instanceof PantsuItem;
 
             if (hasPantsu) {
-                JRComponents.PantsuState currentState = legStack.get(JRComponents.Companion.getPANTSU_STATE());
+                JRComponents.PantsuState currentState = JRComponents.get(legStack, JRComponents.Companion.getPANTSU_STATE());
                 // 只有干净的时候才染红
                 if (currentState == null || currentState == JRComponents.PantsuState.CLEAN) {
-                    legStack.set(JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.BLOODY);
+                    JRComponents.set(legStack, JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.BLOODY);
                 }
             } else {
                 // 没穿胖
@@ -869,9 +869,9 @@ public interface Pregnant{
         // 排出脓液弄脏地面/胖次
         ItemStack legStack = entity.getEquippedStack(EquipmentSlot.LEGS);
         if (!legStack.isEmpty() && legStack.getItem() instanceof PantsuItem) {
-            JRComponents.PantsuState currentState = legStack.get(JRComponents.Companion.getPANTSU_STATE());
+            JRComponents.PantsuState currentState = JRComponents.get(legStack, JRComponents.Companion.getPANTSU_STATE());
             if (currentState == null || currentState == JRComponents.PantsuState.CLEAN) {
-                legStack.set(JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.SOILED);
+                JRComponents.set(legStack, JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.SOILED);
                 entity.sendMessage(Text.of("§c脓液弄脏了胖次..."));
             }
         }
@@ -1638,7 +1638,7 @@ public interface Pregnant{
 
                 if (hasPantsu) {
                     // 如果有胖次，不会掉落物品，而是弄脏胖次
-                    legStack.set(JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.SOILED);
+                    JRComponents.set(legStack, JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.SOILED);
 
                     pregnant.sendMessage(Text.of("§c糟糕，把胖次弄脏了..."));
                     // 给予更严重的恶心/缓慢效果因为身上有脏东西
@@ -1710,9 +1710,9 @@ public interface Pregnant{
                 ItemStack legStack = pregnant.getEquippedStack(EquipmentSlot.LEGS);
                 if (!legStack.isEmpty() && legStack.getItem() instanceof PantsuItem) {
                     // 如果还没脏，就变成湿的；如果已经脏了，保持脏的状态（假设脏优先级更高）
-                    JRComponents.PantsuState currentState = legStack.get(JRComponents.Companion.getPANTSU_STATE());
+                    JRComponents.PantsuState currentState = JRComponents.get(legStack, JRComponents.Companion.getPANTSU_STATE());
                     if (currentState == null || currentState == JRComponents.PantsuState.CLEAN) {
-                        legStack.set(JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.WET);
+                        JRComponents.set(legStack, JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.WET);
                         pregnant.sendMessage(Text.of("§c胖次湿透了..."));
                     }
                 }
@@ -1865,10 +1865,10 @@ public interface Pregnant{
 
                 if (hasPantsu) {
                     // 如果穿着胖次，直接弄脏（模拟脓性分泌物）
-                    JRComponents.PantsuState currentState = legStack.get(JRComponents.Companion.getPANTSU_STATE());
+                    JRComponents.PantsuState currentState = JRComponents.get(legStack, JRComponents.Companion.getPANTSU_STATE());
                     // 只有当胖次是干净的时候才弄脏，避免覆盖更严重的脏污状态
                     if (currentState == null || currentState == JRComponents.PantsuState.CLEAN) {
-                        legStack.set(JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.SOILED);
+                        JRComponents.set(legStack, JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.SOILED);
                     }
                 } else {
                     // 没穿胖次，分泌物留在大腿上 -> 给予 SMEARY (粘腻) 效果
@@ -2068,7 +2068,7 @@ public interface Pregnant{
                 ItemStack legStack = entity.getEquippedStack(EquipmentSlot.LEGS);
                 if (!legStack.isEmpty() && legStack.getItem() instanceof PantsuItem) {
                     // 弄脏胖次
-                    legStack.set(JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.SOILED);
+                    JRComponents.set(legStack, JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.SOILED);
                     entity.sendMessage(Text.of("§c糟糕，痔疮破裂出血弄脏了胖次..."));
                 } else {
                     entity.sendMessage(Text.of("§c感觉后面流血了..."));
@@ -2486,9 +2486,9 @@ public interface Pregnant{
                     }
                     ItemStack legStack = entity.getEquippedStack(EquipmentSlot.LEGS);
                     if (!legStack.isEmpty() && legStack.getItem() instanceof PantsuItem) {
-                        JRComponents.PantsuState currentState = legStack.get(JRComponents.Companion.getPANTSU_STATE());
+                        JRComponents.PantsuState currentState = JRComponents.get(legStack, JRComponents.Companion.getPANTSU_STATE());
                         if (currentState == null || currentState == JRComponents.PantsuState.CLEAN) {
-                            legStack.set(JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.BLOODY);
+                            JRComponents.set(legStack, JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.BLOODY);
                         }
                     }
                 }
@@ -2497,9 +2497,9 @@ public interface Pregnant{
                     entity.damage(entity.getDamageSources().magic(), 1.0f);
                     ItemStack legStack = entity.getEquippedStack(EquipmentSlot.LEGS);
                     if (!legStack.isEmpty() && legStack.getItem() instanceof PantsuItem) {
-                        JRComponents.PantsuState currentState = legStack.get(JRComponents.Companion.getPANTSU_STATE());
+                        JRComponents.PantsuState currentState = JRComponents.get(legStack, JRComponents.Companion.getPANTSU_STATE());
                         if (currentState == null || currentState == JRComponents.PantsuState.CLEAN) {
-                            legStack.set(JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.BLOODY);
+                            JRComponents.set(legStack, JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.BLOODY);
                         }
                     }
                 }
@@ -3032,9 +3032,9 @@ public interface Pregnant{
                 // 弄湿胖次 (复用你的排泄弄脏逻辑)
                 ItemStack legStack = entity.getEquippedStack(EquipmentSlot.LEGS);
                 if (!legStack.isEmpty() && legStack.getItem() instanceof PantsuItem) {
-                    JRComponents.PantsuState currentState = legStack.get(JRComponents.Companion.getPANTSU_STATE());
+                    JRComponents.PantsuState currentState = JRComponents.get(legStack, JRComponents.Companion.getPANTSU_STATE());
                     if (currentState == null || currentState == JRComponents.PantsuState.CLEAN) {
-                        legStack.set(JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.WET);
+                        JRComponents.set(legStack, JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.WET);
                     }
                 }
             }
@@ -3107,13 +3107,13 @@ public interface Pregnant{
 
             if (hasDiaper) {
                 // 漏进尿布
-                legStack.set(JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.SOILED);
+                JRComponents.set(legStack, JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.SOILED);
                 entity.sendMessage(Text.of("§e啊...尿布湿透了..."));
             } else if (hasPantsu) {
                 // 弄湿胖次
-                JRComponents.PantsuState currentState = legStack.get(JRComponents.Companion.getPANTSU_STATE());
+                JRComponents.PantsuState currentState = JRComponents.get(legStack, JRComponents.Companion.getPANTSU_STATE());
                 if (currentState == null || currentState == JRComponents.PantsuState.CLEAN) {
-                    legStack.set(JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.WET);
+                    JRComponents.set(legStack, JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.WET);
                     entity.sendMessage(Text.of("§e没忍住...漏出来把胖次弄湿了..."));
                 }
             } else {
@@ -3340,9 +3340,9 @@ public interface Pregnant{
                 // 弄脏胖次
                 ItemStack legStack = entity.getEquippedStack(EquipmentSlot.LEGS);
                 if (!legStack.isEmpty() && legStack.getItem() instanceof PantsuItem) {
-                    JRComponents.PantsuState pantsuState = legStack.get(JRComponents.Companion.getPANTSU_STATE());
+                    JRComponents.PantsuState pantsuState = JRComponents.get(legStack, JRComponents.Companion.getPANTSU_STATE());
                     if (pantsuState == null || pantsuState == JRComponents.PantsuState.CLEAN) {
-                        legStack.set(JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.SOILED);
+                        JRComponents.set(legStack, JRComponents.Companion.getPANTSU_STATE(), JRComponents.PantsuState.SOILED);
                     }
                 }
                 // 脓液排出稍微减轻病程

@@ -3,12 +3,12 @@ package org.cneko.justarod.item.rod
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.world.World
 import org.cneko.justarod.damage.JRDamageTypes
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 /*
 插到顶了后也还会露出很大一截（你想试试共用吗）
@@ -32,12 +32,12 @@ class LongerRodItem: BothUsedItem(Settings().maxCount(1).maxDamage(1000).compone
     }
 
     override fun appendTooltip(
-        stack: ItemStack?,
-        context: TooltipContext?,
-        tooltip: MutableList<Text>?,
-        type: TooltipType?
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
     ) {
-        super.appendTooltip(stack, context, tooltip, type)
+        super.appendTooltip(stack, world, tooltip, context)
         tooltip?.add(Text.translatable("item.justarod.longer_rod.tooltip"))
     }
 }

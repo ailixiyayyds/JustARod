@@ -14,13 +14,13 @@ class MessagingEvent {
             ChatEvents.CREATE_CHAT_PREFIXES.register{player,prefixes->
                 if (player != null) {
                     player as PlayerEntity
-                    if (player.hasStatusEffect(Registries.STATUS_EFFECT.getEntry(ORGASM_EFFECT))) {
+                    if (ORGASM_EFFECT != null && player.hasStatusEffect(ORGASM_EFFECT)) {
                         prefixes.add("§4高潮")
                     }
-                    if (player.hasStatusEffect(Registries.STATUS_EFFECT.getEntry(ESTRUS_EFFECT))) {
+                    if (ESTRUS_EFFECT != null && player.hasStatusEffect(ESTRUS_EFFECT)) {
                         prefixes.add("§6发情")
                     }
-                    if (player.hasStatusEffect(Registries.STATUS_EFFECT.getEntry(STRONG_EFFECT))){
+                    if (STRONG_EFFECT != null && player.hasStatusEffect(STRONG_EFFECT)){
                         prefixes.add("§b强壮")
                     }
                     if (ImpactModel.isEnable(player)){

@@ -13,9 +13,10 @@ import org.cneko.justarod.packet.FrictionPayload
 class TribochargingRod(settings: Settings) : Item(settings){
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
         // 打开屏幕
-        if (user is ServerPlayerEntity)
-        val payload = FrictionPayload("a")
-        ServerPlayNetworking.send(user, FrictionPayload.ID, payload.toBuf())
+        if (user is ServerPlayerEntity) {
+            val payload = FrictionPayload("a")
+            ServerPlayNetworking.send(user, FrictionPayload.ID, payload.toBuf())
+        }
         return super.use(world, user, hand)
     }
 }

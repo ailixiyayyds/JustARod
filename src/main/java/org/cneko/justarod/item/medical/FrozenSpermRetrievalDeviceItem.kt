@@ -12,7 +12,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.UseAction
 import net.minecraft.world.World
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 class FrozenSpermRetrievalDeviceItem(settings: Settings) : SpermRetrievalDeviceItem(36000, settings) {
 

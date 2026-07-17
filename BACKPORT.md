@@ -31,6 +31,8 @@ Completed source groups:
   `Identifier` channels with `PacketByteBuf` codecs.
 - Custom attributes and status-effect callbacks use the 1.20.1 registry and
   modifier APIs.
+- JustARod custom item components now use stable `ItemStack` NBT keys, with
+  shared Kotlin and Java accessors for save and packet compatibility.
 
 Minecraft 1.20.1 has no generic jump-strength or scale entity attributes.
 The associated jump/scale modifiers are temporarily inactive until equivalent

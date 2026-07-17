@@ -1,7 +1,7 @@
 package org.cneko.justarod.item.electric
 
 import net.minecraft.item.ItemStack
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 /*
 电动的确实好用的说，比普通的棒子要舒服多了

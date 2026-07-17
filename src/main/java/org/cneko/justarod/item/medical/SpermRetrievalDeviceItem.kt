@@ -7,7 +7,7 @@ import net.minecraft.entity.passive.AnimalEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsage
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundEvents
@@ -18,7 +18,7 @@ import net.minecraft.util.UseAction
 import net.minecraft.world.World
 import org.cneko.justarod.entity.JREntities
 import org.cneko.justarod.entity.Pregnant
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 import org.cneko.justarod.item.rod.addEffect
 import java.util.concurrent.TimeUnit
 
@@ -207,7 +207,7 @@ open class SpermRetrievalDeviceItem(val lifeTime: Int, settings: Settings) : Med
 
 
     // --- Tooltip 显示腐坏剩余时间 ---
-    override fun appendTooltip(stack: ItemStack, context: TooltipContext, tooltip: MutableList<Text>, type: TooltipType) {
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         val entityType = stack.get(JRComponents.ENTITY_TYPE)
         val remaining = stack.get(JRComponents.COLLECTED_TIME)
         if (entityType != null && remaining != null) {

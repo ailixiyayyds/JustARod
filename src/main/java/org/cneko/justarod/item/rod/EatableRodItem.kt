@@ -13,7 +13,7 @@ import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
 import net.minecraft.world.event.GameEvent
 import net.minecraft.world.event.GameEvent.Emitter
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 /*
 其实用过之后味道是有点酸的，也会有点咸咸的，你要喜欢可以舔舔，虽然可能有点细菌，不过不是不能接受

@@ -38,8 +38,8 @@ public class EntityAttackEvent {
                 }
                 if (entity instanceof LivingEntity living){
                     if (stack.getItem() instanceof ClonerDevice cloner) {
-                        boolean hasData = stack.contains(JRComponents.Companion.getENTITY_TYPE());
-                        boolean transferred = stack.getOrDefault(JRComponents.Companion.getCLONER_TRANSFERRED(),false);
+                        boolean hasData = JRComponents.contains(stack, JRComponents.Companion.getENTITY_TYPE());
+                        boolean transferred = JRComponents.getOrDefault(stack, JRComponents.Companion.getCLONER_TRANSFERRED(), false);
                         if (hasData && transferred) {
                             return cloner.useOnEntity(stack, playerEntity,living, hand);
                         }

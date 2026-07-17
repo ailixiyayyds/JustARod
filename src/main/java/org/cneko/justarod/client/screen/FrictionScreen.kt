@@ -229,7 +229,7 @@ class FrictionScreen : Screen(Text.empty()) {
         return false
     }
 
-    override fun renderBackground(context: DrawContext?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderBackground(context: DrawContext) {
     }
 
     private data class Particle(

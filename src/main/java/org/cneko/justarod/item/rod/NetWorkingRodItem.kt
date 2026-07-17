@@ -8,7 +8,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.world.World
 import org.cneko.justarod.api.NetWorkingRodData
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 // 都看到这里了，还不去给我点个三连啊，不理你了哼！
 class NetWorkingRodItem: SelfUsedItem(Settings().maxCount(1).maxDamage(NetWorkingRodData.MAX_DAMAGE).component(

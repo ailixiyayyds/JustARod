@@ -1,6 +1,6 @@
 package org.cneko.justarod.item.tooltip
 
-import net.minecraft.item.tooltip.TooltipData
+import net.minecraft.client.item.TooltipData
 import net.minecraft.util.Identifier
 
 /**

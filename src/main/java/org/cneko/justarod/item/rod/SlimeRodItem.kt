@@ -11,7 +11,7 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.World
 import org.cneko.justarod.effect.JREffects
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 /*
 黏黏糊糊的呢

@@ -7,14 +7,14 @@ import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 import org.cneko.justarod.JREnchantments
 import org.cneko.justarod.JRUtil.Companion.getEnchantmentLevel
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 import org.cneko.justarod.entity.Pregnant
 import org.cneko.toneko.common.mod.entities.INeko
 
@@ -46,7 +46,7 @@ class ClonerDevice: Item(Settings().maxCount(1)) {
                 // 采集细胞
                 val entNbt = NbtCompound()
                 entity.writeNbt(entNbt)
-                stack.set(JRComponents.CLONER_ENTITY_NBT, net.minecraft.component.type.NbtComponent.of(entNbt))
+                stack.set(JRComponents.CLONER_ENTITY_NBT, entNbt)
                 stack.set(JRComponents.ENTITY_TYPE, entity.type)
                 stack.set(JRComponents.CLONER_TRANSFERRED, false)
                 stack.set(JRComponents.CLONER_STATE, ClonerState.COLLECTED.name)
@@ -78,7 +78,7 @@ class ClonerDevice: Item(Settings().maxCount(1)) {
                             if (baby != null && baby is LivingEntity) {
                                 val storedNbt = stack.get(JRComponents.CLONER_ENTITY_NBT)
                                 if (storedNbt != null) {
-                                    val copy = storedNbt.copyNbt()
+                                    val copy = storedNbt.copy()
                                     copy.remove("Age")
                                     copy.remove("AgeTicks")
                                     copy.remove("GrowingAge")
@@ -148,8 +148,8 @@ class ClonerDevice: Item(Settings().maxCount(1)) {
         stack.remove(JRComponents.CLONER_STATE)
     }
 
-    override fun appendTooltip(stack: ItemStack, context: TooltipContext, tooltip: MutableList<Text>, type: TooltipType) {
-        super.appendTooltip(stack, context, tooltip, type)
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendTooltip(stack, world, tooltip, context)
         val storedType = stack.get(JRComponents.ENTITY_TYPE)
         if (storedType != null) {
             tooltip.add(Text.of("§7生物种类: ${storedType.name.string}"))

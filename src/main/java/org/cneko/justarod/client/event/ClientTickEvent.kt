@@ -238,7 +238,7 @@ class ClientTickEvent {
 
 
 
-        private val POWER_ICON = Identifier.of("textures/item/diamond_sword.png")
+        private val POWER_ICON = Identifier("minecraft", "textures/item/diamond_sword.png")
         private fun renderPowerBar(context: DrawContext) {
             val client = MinecraftClient.getInstance()
             if (client.options.hudHidden) return
@@ -317,7 +317,8 @@ class ClientTickEvent {
             RenderSystem.setShaderColor(1.0f, 0.71f, 0.76f, alpha) // 动态透明度
 
             // 使用 OpenGL 绘制一个覆盖整个屏幕的矩形
-            val bufferBuilder = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION)
+            val bufferBuilder = Tessellator.getInstance().buffer
+            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION)
             val matrix = context.matrices.peek().positionMatrix
 
             with(bufferBuilder) {
@@ -380,7 +381,8 @@ class ClientTickEvent {
             RenderSystem.setShaderColor(0f, 0f, 0f, faintAlpha)
 
             // 绘制全屏黑色覆盖层
-            val bufferBuilder = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION)
+            val bufferBuilder = Tessellator.getInstance().buffer
+            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION)
             val matrix = context.matrices.peek().positionMatrix
 
             with(bufferBuilder) {
@@ -476,7 +478,7 @@ class ClientTickEvent {
 
         // 记录上一次的着色器状态，防止每帧重复加载导致卡顿
         private var isShaderLoaded = false
-        private val BLUR_SHADER = Identifier.of("shaders/post/blur.json")
+        private val BLUR_SHADER = Identifier("minecraft", "shaders/post/blur.json")
 
         private fun updateCataractShader() {
             val client = MinecraftClient.getInstance()

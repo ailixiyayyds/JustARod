@@ -1,6 +1,7 @@
 package org.cneko.justarod.item.rod
 
-import net.minecraft.component.DataComponentTypes
+import net.minecraft.client.item.TooltipContext
+import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
@@ -10,10 +11,7 @@ import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Formatting
@@ -25,7 +23,7 @@ import org.cneko.justarod.JRAttributes
 import org.cneko.justarod.damage.JRDamageTypes
 import org.cneko.justarod.effect.JREffects
 import org.cneko.justarod.entity.Powerable
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 import org.cneko.toneko.common.mod.items.BazookaItem.Ammunition
 import kotlin.math.sqrt
 
@@ -41,17 +39,17 @@ abstract class EndRodItem(settings: Settings) : Item(settings), EndRodItemInterf
         return ActionResult.SUCCESS
     }
 
-    override fun appendTooltip(stack: ItemStack?, context: TooltipContext?, tooltip: MutableList<Text>?, type: TooltipType?) {
-        super.appendTooltip(stack, context, tooltip, type)
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendTooltip(stack, world, tooltip, context)
         // 将使用次数添加到tooltip中
-        val markedCount: Int = stack?.getOrDefault(JRComponents.Companion.USED_TIME_MARK, 0)!!
+        val markedCount: Int = stack.getOrDefault(JRComponents.Companion.USED_TIME_MARK, 0)
         tooltip?.add(Text.translatable("item.justarod.end_rod.used_count", markedCount).formatted(Formatting.GREEN))
         tooltip?.add(Text.translatable("item.justarod.end_rod.owner", stack.getOrDefault(JRComponents.Companion.OWNER,"无")).formatted(Formatting.YELLOW))
     }
 
-    override fun onCraftByPlayer(stack: ItemStack?, world: World?, player: PlayerEntity?) {
-        super.onCraftByPlayer(stack, world, player)
-        stack?.set(JRComponents.Companion.OWNER, player?.name?.string)
+    override fun onCraft(stack: ItemStack, world: World, player: PlayerEntity) {
+        super.onCraft(stack, world, player)
+        stack.set(JRComponents.Companion.OWNER, player.name.string)
     }
     abstract fun getInstruction(): EndRodInstructions
 
@@ -93,12 +91,12 @@ abstract class OtherUsedItem(settings: Settings):EndRodItem(settings), OtherUsed
 
 open class SelfUsedItem(settings: Settings) : EndRodItem(settings), SelfUsedItemInterface {
     override fun appendTooltip(
-        stack: ItemStack?,
-        context: TooltipContext?,
-        tooltip: MutableList<Text>?,
-        type: TooltipType?
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
     ) {
-        super.appendTooltip(stack, context, tooltip, type)
+        super.appendTooltip(stack, world, tooltip, context)
         val speed = this.getRodSpeed(stack)
         tooltip?.add(Text.translatable("item.justarod.end_rod.speed", speed).formatted(Formatting.LIGHT_PURPLE))
     }
@@ -132,12 +130,12 @@ open class SelfUsedItem(settings: Settings) : EndRodItem(settings), SelfUsedItem
 abstract class BothUsedItem(settings: Settings) : EndRodItem(settings),SelfUsedItemInterface, OtherUsedItemInterface {
 
     override fun appendTooltip(
-        stack: ItemStack?,
-        context: TooltipContext?,
-        tooltip: MutableList<Text>?,
-        type: TooltipType?
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
     ) {
-        super.appendTooltip(stack, context, tooltip, type)
+        super.appendTooltip(stack, world, tooltip, context)
         val speed = this.getRodSpeed(stack)
         tooltip?.add(Text.translatable("item.justarod.end_rod.speed", speed).formatted(Formatting.LIGHT_PURPLE))
     }
@@ -306,12 +304,11 @@ interface EndRodItemInterface{
 
     fun getDamageAmount(stack: ItemStack, amount: Int, world: World?): Int {
         // 无法破坏
-        if (stack.components.contains(DataComponentTypes.UNBREAKABLE)){
+        if (stack.nbt?.getBoolean("Unbreakable") == true){
             return 0
         }
         // 获取物品上的耐久附魔等级
-        val rm = world?.registryManager
-        val unbreakingLevel = stack.enchantments.getLevel(rm?.get(RegistryKeys.ENCHANTMENT)?.entryOf(Enchantments.UNBREAKING))
+        val unbreakingLevel = EnchantmentHelper.getLevel(Enchantments.UNBREAKING, stack)
         var total = 0
         // 遍历每一点潜在耐久损失，进行概率判定
         for (i in 1..amount) {
@@ -341,12 +338,9 @@ enum class EndRodInstructions{
 
 fun LivingEntity.addEffect(effect: StatusEffect?, duration: Int, amplifier: Int) {
     effect?.let {
-        this.addStatusEffect(StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(it), duration, amplifier))
+        this.addStatusEffect(StatusEffectInstance(it, duration, amplifier))
     }
 }
-fun LivingEntity?.addEffect(effect: RegistryEntry<StatusEffect>?, duration: Int, amplifier: Int) {
-    this?.addStatusEffect(StatusEffectInstance(effect, duration, amplifier))
-}
 fun LivingEntity.hasEffect(effect: StatusEffect?): Boolean {
-    return this.hasStatusEffect(Registries.STATUS_EFFECT.getEntry(effect))
+    return effect != null && this.hasStatusEffect(effect)
 }

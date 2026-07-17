@@ -6,10 +6,11 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.registry.Registries
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
+import net.minecraft.world.World
 import org.cneko.justarod.JREnchantments
 import org.cneko.justarod.JRUtil.Companion.containsEnchantment
 import org.cneko.justarod.effect.JREffects
@@ -31,8 +32,8 @@ import net.minecraft.entity.boss.dragon.EnderDragonEntity
 // 继承自 MedicalItem
 class ScalpelItem(settings: Settings) : MedicalItem(settings.maxCount(1).maxDamage(4)) {
 
-    override fun appendTooltip(stack: ItemStack, context: TooltipContext, tooltip: MutableList<Text>, type: TooltipType) {
-        super.appendTooltip(stack, context, tooltip, type)
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendTooltip(stack, world, tooltip, context)
         if (stack.containsEnchantment(JREnchantments.HYSTERECTOMY)) {
             tooltip.add(Text.of("§c使用它可进行子宫切除"))
             tooltip.add(Text.of("§c此操作会永久切除子宫，请谨慎使用！"))

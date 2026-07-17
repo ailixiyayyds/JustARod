@@ -3,12 +3,13 @@ package org.cneko.justarod.item.medical
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
+import net.minecraft.world.World
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import org.cneko.justarod.effect.JREffects
 import org.cneko.justarod.entity.Pregnant
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 import org.cneko.justarod.item.rod.hasEffect
 
 /**
@@ -17,8 +18,8 @@ import org.cneko.justarod.item.rod.hasEffect
 class CottonSwabItem(settings: Settings) : MedicalItem(settings.maxCount(1)) {
 
     // 工具提示逻辑仅用于显示，保留在此类中
-    override fun appendTooltip(stack: ItemStack, context: TooltipContext, tooltip: MutableList<Text>, type: TooltipType) {
-        super.appendTooltip(stack, context, tooltip, type)
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendTooltip(stack, world, tooltip, context)
         stack.get(JRComponents.SECRETIONS_APPEARANCE)?.let { appearance ->
             tooltip.add(Text.of("§7颜色&气味: §f$appearance")) // 添加分泌物外观提示
         }

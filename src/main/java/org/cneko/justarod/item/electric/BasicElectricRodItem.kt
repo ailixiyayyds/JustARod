@@ -1,14 +1,13 @@
 package org.cneko.justarod.item.electric
 
-import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.world.World
 import org.cneko.justarod.damage.JRDamageTypes
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 /*
 其实漏电也不错的说... 低压的话还是挺棒的哦
@@ -17,13 +16,13 @@ import org.cneko.justarod.item.JRComponents
 open class BasicElectricRodItem: SelfUsedElectricRodItem(Settings().component(JRComponents.USED_TIME_MARK,0).component(JRComponents.SPEED,10).maxDamage(10000)) {
 
     override fun appendTooltip(
-        stack: ItemStack?,
-        context: TooltipContext?,
-        tooltip: MutableList<Text>?,
-        type: TooltipType?
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
     ) {
         tooltip?.add(Text.translatable("item.justarod.basic_electric_rod.tooltip"))
-        super.appendTooltip(stack, context, tooltip, type)
+        super.appendTooltip(stack, world, tooltip, context)
     }
 
     override fun damage(stack: ItemStack, amount: Int, world: World?) {

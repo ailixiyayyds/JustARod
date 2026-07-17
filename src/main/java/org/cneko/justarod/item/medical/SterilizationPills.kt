@@ -3,15 +3,16 @@ package org.cneko.justarod.item.medical
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
+import net.minecraft.world.World
 import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import org.cneko.justarod.entity.Pregnant
 
 class SterilizationPills(settings: Settings) : MedicalItem(settings) {
 
-    override fun appendTooltip(stack: ItemStack, context: TooltipContext, tooltip: MutableList<Text>, type: TooltipType) {
-        super.appendTooltip(stack, context, tooltip, type)
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendTooltip(stack, world, tooltip, context)
         tooltip.add(Text.of("§c请谨慎使用！！！"))
         tooltip.add(Text.of("§c你没有悔改的机会！！！"))
     }

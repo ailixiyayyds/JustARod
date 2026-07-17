@@ -4,7 +4,7 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ActionResult
 import net.minecraft.world.World
-import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.*
 
 /*
 自动款的好用喵，不费力呢♡
