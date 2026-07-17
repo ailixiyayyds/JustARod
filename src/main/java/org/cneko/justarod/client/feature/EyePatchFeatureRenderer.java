@@ -24,7 +24,8 @@ public class EyePatchFeatureRenderer extends FeatureRenderer<AbstractClientPlaye
                        AbstractClientPlayerEntity player, float limbAngle, float limbDistance,
                        float tickDelta, float animationProgress, float headYaw, float headPitch) {
 
-        if (!(player instanceof BDSMable bm) || bm.getEyePatch() <= 0) return;
+        BDSMable bm = (BDSMable) player;
+        if (bm.getEyePatch() <= 0) return;
 
         matrices.push();
 

@@ -40,7 +40,7 @@ public interface Powerable{
         // 如果能量低于0了，晕倒
         if (entity.getPower() <= 0) {
             entity.setPower(0);
-            entity.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(JREffects.Companion.getFAINT_EFFECT()), 1000, 1));
+            entity.addStatusEffect(new StatusEffectInstance(JREffects.Companion.getFAINT_EFFECT(), 1000, 1));
         }
     }
 

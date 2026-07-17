@@ -36,20 +36,15 @@ public class LivingEntityMixin implements Insertable {
 
     @Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
     public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
-        LivingEntity self = (LivingEntity) (Object) this;
         if (nbt.contains("rodInside")) {
-            var rod = ItemStack.fromNbt(self.getRegistryManager(),nbt.getCompound("rodInside"));
-            rod.ifPresent(this::setRodInside);
+            setRodInside(ItemStack.fromNbt(nbt.getCompound("rodInside")));
         }
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
     public void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
-        LivingEntity self = (LivingEntity) (Object) this;
         if (!getRodInside().isEmpty()) {
-            nbt.put("rodInside", getRodInside().encode(
-                    self.getRegistryManager()
-            ));
+            nbt.put("rodInside", getRodInside().writeNbt(new NbtCompound()));
         }
     }
 

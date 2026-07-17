@@ -24,13 +24,14 @@ public class RodArmorRenderer <T extends RodArmorItem<T>> extends GeoArmorRender
         super(new DefaultedItemGeoModel(Identifier.of(MODID, "armor/"+id)));
     }
 
-    public void preRender(MatrixStack poseStack, T item, BakedGeoModel model, @Nullable VertexConsumerProvider bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
+    @Override
+    public void preRender(MatrixStack poseStack, T item, BakedGeoModel model, VertexConsumerProvider bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         if (EnchantmentUtil.hasEnchantment(ToNekoEnchantments.REVERSION.getValue(), this.currentStack)) {
             poseStack.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(180.0F));
             poseStack.translate(0.0, -1.5, -0.0625);
         }
 
-        super.preRender(poseStack, item, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
+        super.preRender(poseStack, item, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
 

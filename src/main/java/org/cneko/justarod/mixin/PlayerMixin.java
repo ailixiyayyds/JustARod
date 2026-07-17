@@ -1,7 +1,6 @@
 package org.cneko.justarod.mixin;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.item.FoodComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -922,20 +921,20 @@ public abstract class PlayerMixin implements Powerable, Pregnant, BDSMable {
     }
 
     @Inject(method = "eatFood",at = @At("HEAD"))
-    public void eatFood(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
+    public void eatFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
         if (stack.isOf(Items.MILK_BUCKET)){
             // 如果有HPV且在3天内
             if (this.getHPV() > 0 && this.getHPV() < 20*60*20*3) {
                 this.setHPV(0);
                 // 移除HPV效果
-                ((PlayerEntity)(Object)this).removeStatusEffect(Registries.STATUS_EFFECT.getEntry(JREffects.Companion.getHPV_EFFECT()));
+                ((PlayerEntity)(Object)this).removeStatusEffect(JREffects.Companion.getHPV_EFFECT());
             }
         }
         if (stack.isOf(Items.ENCHANTED_GOLDEN_APPLE)){
             // 如果有HPV且在6天内
             if (this.getHPV() > 0 && this.getHPV() < 20*60*20*6) {
                 this.setHPV(0);
-                ((PlayerEntity)(Object)this).removeStatusEffect(Registries.STATUS_EFFECT.getEntry(JREffects.Companion.getHPV_EFFECT()));
+                ((PlayerEntity)(Object)this).removeStatusEffect(JREffects.Companion.getHPV_EFFECT());
             }
         }
     }

@@ -13,7 +13,7 @@ import org.cneko.justarod.item.*
 /*
 其实可以插到顶了
  */
-class LongRodItem : BothUsedItem(Settings().component(JRComponents.Companion.USED_TIME_MARK, 0).maxDamage(2000).maxCount(1)){
+class LongRodItem : BothUsedItem(Settings().component(JRComponents.Companion.USED_TIME_MARK, 0).maxDamage(2000)){
     override fun getInstruction(): EndRodInstructions {
         return EndRodInstructions.USE_ON_OTHER_INSERT
     }

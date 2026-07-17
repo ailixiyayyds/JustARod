@@ -43,6 +43,7 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // kotlin
+    modImplementation "net.fabricmc:fabric-language-kotlin:1.10.20+kotlin.1.9.24"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1"
     // lombok
@@ -59,7 +60,7 @@ dependencies {
 
     modCompileOnly "me.lucko:fabric-permissions-api:0.3.1"
 
-    include modApi('teamreborn:energy:4.1.0') {
+    include modApi('teamreborn:energy:3.0.0') {
         exclude(group: "net.fabricmc.fabric-api")
     }
 

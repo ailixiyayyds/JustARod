@@ -17,10 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class BackgroundRendererMixin {
 
     // 1. 修改雾的颜色：强制变成乳白色
-    @Inject(method = "applyFogColor", at = @At("RETURN"))
+    @Inject(method = "render", at = @At("RETURN"))
     private static void modifyFogColorForCataract(CallbackInfo ci) {
         PlayerEntity player = MinecraftClient.getInstance().player;
-        if (player instanceof Pregnant pregnant && pregnant.getCataract() > 0) {
+        if (player != null && ((Pregnant) player).getCataract() > 0) {
+            Pregnant pregnant = (Pregnant) player;
             // 获取严重程度
             float maxSeverity = 20 * 60 * 20 * 10f;
             float progress = (float) pregnant.getCataract();

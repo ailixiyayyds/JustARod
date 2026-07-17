@@ -55,7 +55,7 @@ public class JRScreenBuilders {
     public static final class JRButtonFactories {
         public static final ButtonFactory SEEEEEX_NEKO_BREED_BUTTON = screen -> ButtonWidget.builder(Text.translatable("screen.toneko.seeeeeex_neko_entity_interactive.button.breed"), (btn) -> {
             if (screen.getNeko() instanceof Sexual) {
-                if (getInstance().player.hasStatusEffect(Registries.STATUS_EFFECT.getEntry(JREffects.Companion.getKENJA_TIME_EFFECT()))){
+                if (getInstance().player.hasStatusEffect(JREffects.Companion.getKENJA_TIME_EFFECT())){
                     getInstance().player.sendMessage(Text.of("§c你现在还不想交配!"));
                 }
                 MinecraftClient.getInstance().setScreen(new InteractionScreen(Text.empty(), screen.getNeko(), screen.lastScreen, SEEEEEX_NEKO_BREED_SCREEN));

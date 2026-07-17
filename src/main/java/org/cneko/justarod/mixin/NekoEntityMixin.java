@@ -43,8 +43,7 @@ public abstract class NekoEntityMixin implements Insertable{
     @Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
     public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
         if (nbt.contains("rodInside")) {
-            var rod = ItemStack.fromNbt(this.getEntity().getRegistryManager(),nbt.getCompound("rodInside"));
-            rod.ifPresent(this::setRodInside);
+            setRodInside(ItemStack.fromNbt(nbt.getCompound("rodInside")));
         }
         if (this.getEntity() instanceof Pregnant pregnant){
             pregnant.readPregnantFromNbt(nbt);
@@ -54,9 +53,7 @@ public abstract class NekoEntityMixin implements Insertable{
     @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
     public void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
         if (!getRodInside().isEmpty()) {
-            nbt.put("rodInside", getRodInside().encode(
-                    this.getEntity().getRegistryManager()
-            ));
+            nbt.put("rodInside", getRodInside().writeNbt(new NbtCompound()));
         }
         if (this.getEntity() instanceof Pregnant pregnant){
             pregnant.writePregnantToNbt(nbt);

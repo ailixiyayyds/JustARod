@@ -9,9 +9,9 @@ This repository is a public, community-maintained backport of the original
 - Upstream baseline: version 0.2.2 at commit `f463a46698a37f95cfcd2e98dd70c38078b986c6`
 - Required backport: toNeko for Minecraft 1.20.1
 - Development branch: `1.20.1-backport`
-- Status: the Minecraft 1.20.1/Java 17 toolchain now resolves all dependencies
-  and reaches Kotlin source compilation. The 1.21 API migration is in progress;
-  there is no usable release yet.
+- Status: the Minecraft 1.20.1/Java 17 source backport builds successfully.
+  Dedicated-server loading reaches the EULA stop, and the development client
+  loads resources, starts an integrated server, and joins a world.
 - Relationship to upstream: unofficial; issues specific to this backport belong in this fork
 
 ## Development setup
@@ -37,7 +37,9 @@ Completed source groups:
   entity renderers now use their Minecraft 1.20.1/GeckoLib 4.4 interfaces.
 - All Kotlin sources now compile against Minecraft 1.20.1. Food definitions,
   armor materials, tooltips, item state, and legacy item callbacks have been
-  migrated; Java and Mixin source migration remains in progress.
+  migrated.
+- Java sources and Mixins now compile and apply on 1.20.1. Development server
+  and client startup smoke tests pass through mod initialization.
 
 Minecraft 1.20.1 has no generic jump-strength or scale entity attributes.
 The associated jump/scale modifiers are temporarily inactive until equivalent

@@ -34,7 +34,8 @@ public class JRClientNetworkingEvents {
             JRSyncPayload payload = JRSyncPayload.read(buf);
             // 确保在主线程执行
             client.execute(() -> {
-                if (client.player instanceof Pregnant clientPregnant) {
+                if (client.player != null) {
+                    Pregnant clientPregnant = (Pregnant) client.player;
                     List<Object> values = payload.values();
                     List<JRProperty<?>> properties = JRRegistry.INSTANCE.getPROPERTIES();
 

@@ -24,7 +24,8 @@ public class BallMouthFeatureRenderer extends FeatureRenderer<AbstractClientPlay
                        AbstractClientPlayerEntity player, float limbAngle, float limbDistance,
                        float tickDelta, float animationProgress, float headYaw, float headPitch) {
 
-        if (!(player instanceof BDSMable bm) || bm.getBallMouth() <= 0) return;
+        BDSMable bm = (BDSMable) player;
+        if (bm.getBallMouth() <= 0) return;
 
         matrices.push();
 

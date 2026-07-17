@@ -134,7 +134,7 @@ public interface BDSMable {
             // 添加电击状态效果
             electricShockable.addStatusEffect(
                     new StatusEffectInstance(
-                            Registries.STATUS_EFFECT.getEntry(ToNekoEffects.NEKO_EFFECT),
+                            ToNekoEffects.NEKO_EFFECT,
                             20, // 1秒刷新一次
                             0,
                             true,
@@ -227,7 +227,7 @@ public interface BDSMable {
             );
             bundled.addStatusEffect(
                     new StatusEffectInstance(
-                            Registries.STATUS_EFFECT.getEntry(JREffects.Companion.getJUMP_NERF_EFFECT()),
+                            JREffects.Companion.getJUMP_NERF_EFFECT(),
                             20,
                             10, // 1秒刷新一次
                             true,
@@ -281,7 +281,7 @@ public interface BDSMable {
         if (shackled.getShackled()>0){
             shackled.addStatusEffect(
                     new StatusEffectInstance(
-                            Registries.STATUS_EFFECT.getEntry(JREffects.Companion.getJUMP_NERF_EFFECT()),
+                            JREffects.Companion.getJUMP_NERF_EFFECT(),
                             20,
                             10, // 1秒刷新一次
                             true,

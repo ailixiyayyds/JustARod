@@ -24,7 +24,8 @@ public class EarplugFeatureRenderer extends FeatureRenderer<AbstractClientPlayer
                        AbstractClientPlayerEntity player, float limbAngle, float limbDistance,
                        float tickDelta, float animationProgress, float headYaw, float headPitch) {
 
-        if (!(player instanceof BDSMable bm) || bm.getEarplug() <= 0) return;
+        BDSMable bm = (BDSMable) player;
+        if (bm.getEarplug() <= 0) return;
 
         matrices.push();
 

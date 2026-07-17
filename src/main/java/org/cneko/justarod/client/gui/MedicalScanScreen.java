@@ -84,19 +84,19 @@ public abstract class MedicalScanScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
         // 判断鼠标是否在扫描仪区域内，只有在区域内才允许缩放
         if (mouseX >= this.x && mouseX <= this.x + this.imageWidth &&
                 mouseY >= this.y && mouseY <= this.y + this.imageHeight) {
 
             float zoomSensitivity = 0.15F; // 缩放灵敏度
-            float newZoom = this.zoom + (float) verticalAmount * zoomSensitivity;
+            float newZoom = this.zoom + (float) amount * zoomSensitivity;
 
             // 限制缩放级别在 0.5x 到 5.0x 之间
             this.zoom = MathHelper.clamp(newZoom, 0.5F, 5.0F);
             return true;
         }
-        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, amount);
     }
 
     // === 鼠标拖动事件 ===

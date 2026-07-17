@@ -1,12 +1,10 @@
 package org.cneko.justarod.event;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.GameRules;
 import org.cneko.justarod.entity.Insertable;
 
@@ -17,17 +15,10 @@ public class EntityDeathEvent {
         ServerLivingEntityEvents.AFTER_DEATH.register(DROP_ROD_AFTER_DEATH);
     }
     private static final ServerLivingEntityEvents.AfterDeath DROP_ROD_AFTER_DEATH = (entity,dmgSource) -> {
-        if (entity instanceof Insertable insertable //有点分不清mc要的Java版本,我用java16不过分吧
-                && insertable.hasRodInside()
-        ){
+        Insertable insertable = (Insertable) entity;
+        if (insertable.hasRodInside()){
             var rodInside = insertable.getRodInside();
-            var bindingCurseFlag = false;
-            for (RegistryEntry<Enchantment> entry:EnchantmentHelper.getEnchantments(rodInside).getEnchantments()){
-                if (entry.matchesKey(Enchantments.BINDING_CURSE)){
-                    bindingCurseFlag = true;
-                    break;
-                }
-            }
+            var bindingCurseFlag = EnchantmentHelper.getLevel(Enchantments.BINDING_CURSE, rodInside) > 0;
 
             if (!entity.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY)
                     && !bindingCurseFlag

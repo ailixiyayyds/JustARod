@@ -40,6 +40,6 @@ public class RashFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEnt
         VertexConsumer consumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(RASH_TEXTURE));
 
         // 直接复用上下文模型（姿势和旋转已在主渲染中同步过）
-        this.getContextModel().render(matrices, consumer, light, OverlayTexture.DEFAULT_UV);
+        this.getContextModel().render(matrices, consumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
     }
 }

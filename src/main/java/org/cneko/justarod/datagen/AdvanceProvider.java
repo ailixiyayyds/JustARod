@@ -47,18 +47,16 @@ public class AdvanceProvider extends FabricAdvancementProvider {
                         JRItems.Companion.getINSERTION_PEDESTAL(),
                         Text.literal("草羊机"),
                         Text.literal("对羊使用插入底座"),
-                        Identifier.ofVanilla("textures/gui/advancements/backgrounds/adventure.png"),
+                        new Identifier("minecraft", "textures/gui/advancements/backgrounds/adventure.png"),
                         AdvancementFrame.TASK,
                         true,
                         true,
                         false
                 )
                 .criterion("grass_sheep",
-                        JRCriteria.ITEM_USED_ON_ENTITY_CRITERION.create(
                         ItemUsedOnEntityCriterion.create(
                             ItemPredicate.Builder.create().items(JRItems.Companion.getINSERTION_PEDESTAL()).build(),
                             EntityPredicate.Builder.create().type(EntityType.SHEEP).build()
-                        )
                 ))
                 .build(consumer, MODID + ":grass_sheep");
     }

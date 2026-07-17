@@ -41,6 +41,6 @@ public class BundledFeatureRenderer extends FeatureRenderer<AbstractClientPlayer
         matrices.scale(1.01f,1.01f,1.01f);
 
         // 直接复用上下文模型（姿势和旋转已在主渲染中同步过）
-        this.getContextModel().render(matrices, consumer, light, OverlayTexture.DEFAULT_UV);
+        this.getContextModel().render(matrices, consumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
     }
 }

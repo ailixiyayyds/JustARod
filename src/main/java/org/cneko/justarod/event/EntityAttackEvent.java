@@ -83,7 +83,7 @@ public class EntityAttackEvent {
         }
 
         if (Registries.ITEM.getId(stack.getItem()).getPath().equalsIgnoreCase("end_rod") && entity instanceof LivingEntity e){
-            StatusEffectInstance orgasm = new StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(JREffects.Companion.getORGASM_EFFECT()), 20, 1);
+            StatusEffectInstance orgasm = new StatusEffectInstance(JREffects.Companion.getORGASM_EFFECT(), 20, 1);
             e.addStatusEffect(orgasm);
         }
         return ActionResult.PASS;

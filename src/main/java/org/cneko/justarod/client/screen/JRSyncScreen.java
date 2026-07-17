@@ -115,7 +115,7 @@ public class JRSyncScreen extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         // 画背景 (如果你是在较新版本，建议加上这句防止文字重叠看不清)
-        this.renderBackground(context, mouseX, mouseY, delta);
+        this.renderBackground(context);
 
         // 标题
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 15, 0xFFFFFF);
