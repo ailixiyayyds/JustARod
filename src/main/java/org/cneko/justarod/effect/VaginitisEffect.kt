@@ -11,11 +11,11 @@ class VaginitisEffect: StatusEffect(StatusEffectCategory.HARMFUL, 0xD3D3D3) {
         return true
     }
 
-    override fun applyUpdateEffect(entity: LivingEntity?, amplifier: Int): Boolean {
+    override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int) {
         // 1/200的概率缓慢
         if (entity != null && entity.random.nextInt(200) == 0) {
             entity.addStatusEffect(StatusEffectInstance(StatusEffects.SLOWNESS, 200, 0))
         }
-        return super.applyUpdateEffect(entity, amplifier)
+        super.applyUpdateEffect(entity, amplifier)
     }
 }

@@ -8,14 +8,14 @@ import net.minecraft.registry.Registries
 import org.cneko.justarod.entity.Pregnant
 
 class UrethritisEffect: StatusEffect(StatusEffectCategory.HARMFUL, 0xff0ead0) {
-    override fun applyUpdateEffect(entity: LivingEntity?, amplifier: Int): Boolean {
+    override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int) {
         if (entity is Pregnant) {
             entity as Pregnant
             if (entity.urethritis<=0){
                 // 清除效果
-                entity.removeStatusEffect(Registries.STATUS_EFFECT.getEntry(JREffects.URETHRITIS_EFFECT))
+                JREffects.URETHRITIS_EFFECT?.let { entity.removeStatusEffect(it) }
             }
         }
-        return super.applyUpdateEffect(entity, amplifier)
+        super.applyUpdateEffect(entity, amplifier)
     }
 }

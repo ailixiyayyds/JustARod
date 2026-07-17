@@ -869,7 +869,8 @@ public abstract class PlayerMixin implements Powerable, Pregnant, BDSMable {
         }
 
         // 发送给客户端
-        ServerPlayNetworking.send(player, new JRSyncPayload(currentValues));
+        JRSyncPayload payload = new JRSyncPayload(currentValues);
+        ServerPlayNetworking.send(player, JRSyncPayload.ID, payload.toBuf());
     }
 
     @Inject(method = "tick",at = @At("HEAD"))

@@ -26,13 +26,15 @@ import static net.minecraft.client.MinecraftClient.getInstance;
 
 public class JRClientNetworkingEvents {
     public static void init(){
-        ClientPlayNetworking.registerGlobalReceiver(FrictionPayload.ID,((payload, context) -> {
-            getInstance().setScreen(new FrictionScreen());
+        ClientPlayNetworking.registerGlobalReceiver(FrictionPayload.ID,((client, handler, buf, responseSender) -> {
+            FrictionPayload.read(buf);
+            client.execute(() -> getInstance().setScreen(new FrictionScreen()));
         }));
-        ClientPlayNetworking.registerGlobalReceiver(JRSyncPayload.ID, (payload, context) -> {
+        ClientPlayNetworking.registerGlobalReceiver(JRSyncPayload.ID, (client, handler, buf, responseSender) -> {
+            JRSyncPayload payload = JRSyncPayload.read(buf);
             // 确保在主线程执行
-            context.client().execute(() -> {
-                if (context.client().player instanceof Pregnant clientPregnant) {
+            client.execute(() -> {
+                if (client.player instanceof Pregnant clientPregnant) {
                     List<Object> values = payload.values();
                     List<JRProperty<?>> properties = JRRegistry.INSTANCE.getPROPERTIES();
 
@@ -48,7 +50,9 @@ public class JRClientNetworkingEvents {
                 }
             });
         });
-        ClientPlayNetworking.registerGlobalReceiver(BDSMPayload.ID, (payload, context) -> {
+        ClientPlayNetworking.registerGlobalReceiver(BDSMPayload.ID, (client, handler, buf, responseSender) -> {
+            BDSMPayload payload = BDSMPayload.read(buf);
+            client.execute(() -> {
             UUID uuid = UUID.fromString(payload.uuid());
             PlayerEntity player = MinecraftClient.getInstance().player;
 
@@ -73,9 +77,12 @@ public class JRClientNetworkingEvents {
             if (entity instanceof BDSMable bm) {
                 processBDSM.accept(bm);
             }
+            });
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(MedicalPayload.ID,((payload, context) -> {
+        ClientPlayNetworking.registerGlobalReceiver(MedicalPayload.ID,((client, handler, buf, responseSender) -> {
+            MedicalPayload payload = MedicalPayload.read(buf);
+            client.execute(() -> {
             UUID uuid = UUID.fromString(payload.uuid());
             PlayerEntity player = MinecraftClient.getInstance().player;
 
@@ -92,9 +99,11 @@ public class JRClientNetworkingEvents {
             if (entity instanceof Pregnant pre) {
                 processMedical.accept(pre);
             }
+            });
         }));
 
-        ClientPlayNetworking.registerGlobalReceiver(XRayScanScreenPayload.ID,(payload,context)->{
+        ClientPlayNetworking.registerGlobalReceiver(XRayScanScreenPayload.ID,(client, handler, buf, responseSender)->{
+            XRayScanScreenPayload payload = XRayScanScreenPayload.read(buf);
             int id = payload.targetEntityId();
             ScanType type = payload.scanType();
             Entity entity = null;

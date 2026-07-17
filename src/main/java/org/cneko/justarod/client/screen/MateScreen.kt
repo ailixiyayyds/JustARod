@@ -85,7 +85,8 @@ class MateScreen(val nekoEntity: NekoEntity) : Screen(Text.empty()), INekoScreen
     }
 
     private fun onDone() {
-        ClientPlayNetworking.send(MatePayload(nekoEntity.uuid.toString(), amountValue, timeValue))
+        val payload = MatePayload(nekoEntity.uuid.toString(), amountValue, timeValue)
+        ClientPlayNetworking.send(MatePayload.ID, payload.toBuf())
         close()
     }
 

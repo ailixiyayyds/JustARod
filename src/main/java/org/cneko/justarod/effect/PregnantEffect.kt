@@ -9,6 +9,7 @@ import net.minecraft.entity.effect.StatusEffectCategory
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import org.cneko.justarod.JRUtil.Companion.rodId
+import org.cneko.justarod.JRUtil.Companion.rodEffectUuid
 
 class PregnantEffect: StatusEffect(StatusEffectCategory.NEUTRAL, 0xe9b8b3) {
     companion object{
@@ -17,11 +18,10 @@ class PregnantEffect: StatusEffect(StatusEffectCategory.NEUTRAL, 0xe9b8b3) {
     }
     init {
         // 速度减慢
-        this.addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED,IDENTIFIER, -0.03, EntityAttributeModifier.Operation.ADD_VALUE)
+        this.addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, rodEffectUuid("pregnant"), -0.03, EntityAttributeModifier.Operation.ADDITION)
         // 跳跃高度减小
-        this.addAttributeModifier(EntityAttributes.GENERIC_JUMP_STRENGTH, IDENTIFIER, -0.1, EntityAttributeModifier.Operation.ADD_VALUE)
         // 攻击力降低
-        this.addAttributeModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE, IDENTIFIER, -0.5, EntityAttributeModifier.Operation.ADD_VALUE)
+        this.addAttributeModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE, rodEffectUuid("pregnant"), -0.5, EntityAttributeModifier.Operation.ADDITION)
     }
 
     override fun canApplyUpdateEffect(duration: Int, amplifier: Int): Boolean {

@@ -117,7 +117,8 @@ class FrictionScreen : Screen(Text.empty()) {
     private fun updateHeat(delta: Float) {
         // 如果大于95%，则晕倒
         if (heat > 0.95f * maxHeat) {
-            ClientPlayNetworking.send(FullHeatPayload("full"))
+            val payload = FullHeatPayload("full")
+            ClientPlayNetworking.send(FullHeatPayload.ID, payload.toBuf())
             MinecraftClient.getInstance().setScreen(null)
         }
         // 计算滑块位置的变化量

@@ -29,9 +29,11 @@ public class ServerPlayerMixin {
         slowTick++;
         if (slowTick >=10){
             player.getWorld().getEntitiesByClass(ServerPlayerEntity.class, player.getBoundingBox().expand(10), (e) -> true).forEach(e -> {
-                ServerPlayNetworking.send(e, new BDSMPayload(player.getUuidAsString(), player.getBallMouth() > 0, player.getElectricShock() > 0, player.getBundled() > 0, player.getEyePatch() > 0, player.getEarplug() > 0, player.getHandcuffed() > 0, player.getShackled() > 0, player.getNoMatingPlz() > 0));
+                BDSMPayload payload = new BDSMPayload(player.getUuidAsString(), player.getBallMouth() > 0, player.getElectricShock() > 0, player.getBundled() > 0, player.getEyePatch() > 0, player.getEarplug() > 0, player.getHandcuffed() > 0, player.getShackled() > 0, player.getNoMatingPlz() > 0);
+                ServerPlayNetworking.send(e, BDSMPayload.ID, payload.toBuf());
             });
-            ServerPlayNetworking.send(player, new BDSMPayload(player.getUuidAsString(), player.getBallMouth() > 0, player.getElectricShock() > 0, player.getBundled() > 0, player.getEyePatch() > 0, player.getEarplug() > 0, player.getHandcuffed() > 0, player.getShackled() > 0, player.getNoMatingPlz() > 0));
+            BDSMPayload payload = new BDSMPayload(player.getUuidAsString(), player.getBallMouth() > 0, player.getElectricShock() > 0, player.getBundled() > 0, player.getEyePatch() > 0, player.getEarplug() > 0, player.getHandcuffed() > 0, player.getShackled() > 0, player.getNoMatingPlz() > 0);
+            ServerPlayNetworking.send(player, BDSMPayload.ID, payload.toBuf());
             slowTick = 0;
         }
     }

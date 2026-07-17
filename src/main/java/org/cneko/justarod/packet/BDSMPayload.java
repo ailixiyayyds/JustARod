@@ -1,55 +1,43 @@
 package org.cneko.justarod.packet;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import static org.cneko.justarod.Justarod.MODID;
 
-public record BDSMPayload(String uuid, boolean ballMouth, boolean electricShock,boolean bundled,boolean eyePatch,boolean earplug,boolean handcuffed,boolean shackled,boolean noMatingPlz) implements CustomPayload{
-    public static final CustomPayload.Id<BDSMPayload> ID = new CustomPayload.Id<>(Identifier.of(MODID, "bdsm"));
+public record BDSMPayload(String uuid, boolean ballMouth, boolean electricShock,
+                          boolean bundled, boolean eyePatch, boolean earplug,
+                          boolean handcuffed, boolean shackled, boolean noMatingPlz) {
+    public static final Identifier ID = new Identifier(MODID, "bdsm");
 
-    public static final PacketCodec<RegistryByteBuf, BDSMPayload> CODEC = PacketCodec.of(
-            // 编码（写入）
-            (payload, buf) -> {
-                buf.writeString(payload.uuid());
+    public PacketByteBuf toBuf() {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeString(uuid);
+        int flags = 0;
+        flags |= ballMouth ? 1 : 0;
+        flags |= (electricShock ? 1 : 0) << 1;
+        flags |= (bundled ? 1 : 0) << 2;
+        flags |= (eyePatch ? 1 : 0) << 3;
+        flags |= (earplug ? 1 : 0) << 4;
+        flags |= (handcuffed ? 1 : 0) << 5;
+        flags |= (shackled ? 1 : 0) << 6;
+        flags |= (noMatingPlz ? 1 : 0) << 7;
+        buf.writeInt(flags);
+        return buf;
+    }
 
-                int flags = 0;
-                flags |= (payload.ballMouth() ? 1 : 0);
-                flags |= (payload.electricShock() ? 1 : 0) << 1;
-                flags |= (payload.bundled()       ? 1 : 0) << 2;
-                flags |= (payload.eyePatch()      ? 1 : 0) << 3;
-                flags |= (payload.earplug()       ? 1 : 0) << 4;
-                flags |= (payload.handcuffed()    ? 1 : 0) << 5;
-                flags |= (payload.shackled()      ? 1 : 0) << 6;
-                flags |= (payload.noMatingPlz()    ? 1 : 0) << 7;
-
-                buf.writeInt(flags);
-            },
-            // 解码（读取）
-            buf -> {
-                String uuid = buf.readString();
-                int flags = buf.readInt();
-
-                return new BDSMPayload(
-                        uuid,
-                        (flags & 1) == 1,
-                        (flags >> 1 & 1) == 1,
-                        (flags >> 2 & 1) == 1,
-                        (flags >> 3 & 1) == 1,
-                        (flags >> 4 & 1) == 1,
-                        (flags >> 5 & 1) == 1,
-                        (flags >> 6 & 1) == 1,
-                        (flags >> 7 & 1) == 1
-                );
-            }
-    );
-
-
-    @Override
-    public CustomPayload.Id<? extends CustomPayload> getId() {
-        return ID;
+    public static BDSMPayload read(PacketByteBuf buf) {
+        String uuid = buf.readString();
+        int flags = buf.readInt();
+        return new BDSMPayload(uuid,
+                (flags & 1) != 0,
+                (flags & 1 << 1) != 0,
+                (flags & 1 << 2) != 0,
+                (flags & 1 << 3) != 0,
+                (flags & 1 << 4) != 0,
+                (flags & 1 << 5) != 0,
+                (flags & 1 << 6) != 0,
+                (flags & 1 << 7) != 0);
     }
 }

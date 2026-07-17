@@ -1,24 +1,20 @@
 package org.cneko.justarod.packet;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import static org.cneko.justarod.Justarod.MODID;
 
 // 哼哼
-public record FrictionPayload(String message) implements CustomPayload {
-    public static final CustomPayload.Id<FrictionPayload> ID = new CustomPayload.Id<>(Identifier.of(MODID, "friction"));
-    public static final PacketCodec<RegistryByteBuf,FrictionPayload> CODEC = PacketCodec.tuple(
-            PacketCodecs.STRING,
-            FrictionPayload::message,
-            FrictionPayload::new
-    );
+public record FrictionPayload(String message) {
+    public static final Identifier ID = new Identifier(MODID, "friction");
 
-    @Override
-    public Id<? extends CustomPayload> getId() {
-        return ID;
+    public PacketByteBuf toBuf() {
+        return PacketByteBufs.create().writeString(message);
+    }
+
+    public static FrictionPayload read(PacketByteBuf buf) {
+        return new FrictionPayload(buf.readString());
     }
 }

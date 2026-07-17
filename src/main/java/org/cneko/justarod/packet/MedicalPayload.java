@@ -1,32 +1,22 @@
 package org.cneko.justarod.packet;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import static org.cneko.justarod.Justarod.MODID;
 
-public record MedicalPayload(String uuid, boolean isAmputated) implements CustomPayload {
-    public static final CustomPayload.Id<MedicalPayload> ID = new CustomPayload.Id<>(Identifier.of(MODID, "medical"));
+public record MedicalPayload(String uuid, boolean isAmputated) {
+    public static final Identifier ID = new Identifier(MODID, "medical");
 
-    // 定义编码与解码逻辑
-    public static final PacketCodec<RegistryByteBuf, MedicalPayload> CODEC = PacketCodec.of(
-            // 编码（写入）
-            (payload, buf) -> {
-                buf.writeString(payload.uuid());
-                buf.writeBoolean(payload.isAmputated());
-            },
-            // 解码（读取）
-            buf -> {
-                String uuid = buf.readString();
-                boolean isAmputated = buf.readBoolean();
-                return new MedicalPayload(uuid, isAmputated);
-            }
-    );
+    public PacketByteBuf toBuf() {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeString(uuid);
+        buf.writeBoolean(isAmputated);
+        return buf;
+    }
 
-    @Override
-    public Id<? extends CustomPayload> getId() {
-        return ID;
+    public static MedicalPayload read(PacketByteBuf buf) {
+        return new MedicalPayload(buf.readString(), buf.readBoolean());
     }
 }

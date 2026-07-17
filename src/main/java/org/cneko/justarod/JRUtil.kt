@@ -1,6 +1,7 @@
 package org.cneko.justarod
 
 import net.minecraft.enchantment.Enchantment
+import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
@@ -8,12 +9,14 @@ import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Box
 import net.minecraft.world.World
 import org.cneko.justarod.Justarod.MODID
 import org.cneko.toneko.common.mod.entities.INeko
+import java.nio.charset.StandardCharsets
+import java.util.UUID
 import kotlin.jvm.optionals.getOrElse
 import kotlin.text.get
 
@@ -46,22 +49,20 @@ class JRUtil {
             return entities.filter {it != entity}
         }
         fun rodId(path:String): Identifier{
-            return Identifier.of(MODID, path)
+            return Identifier(MODID, path)
         }
 
-        fun ItemStack.containsEnchantment(enchantment: RegistryKey<Enchantment>): Boolean{
-            return this.hasEnchantments() && this.enchantments.enchantments.any { e ->
-                if(e.key.isPresent){
-                    return e.key.get().value.equals(enchantment.value)
-                }
-                return false
-            }
+        fun rodEffectUuid(path: String): String {
+            return UUID.nameUUIDFromBytes("$MODID:$path".toByteArray(StandardCharsets.UTF_8)).toString()
+        }
+
+        fun ItemStack.containsEnchantment(enchantment: RegistryKey<Enchantment>): Boolean {
+            val value = Registries.ENCHANTMENT.get(enchantment.value) ?: return false
+            return EnchantmentHelper.getLevel(value, this) > 0
         }
         fun ItemStack.getEnchantmentLevel(world : World,enchantment: RegistryKey<Enchantment>): Int {
-            val rm = world.registryManager
-            val level = this.enchantments.getLevel(rm?.get(RegistryKeys.ENCHANTMENT)?.entryOf(enchantment))
-
-            return level
+            val value = Registries.ENCHANTMENT.get(enchantment.value) ?: return 0
+            return EnchantmentHelper.getLevel(value, this)
         }
 
 

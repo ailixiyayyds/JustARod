@@ -8,6 +8,7 @@ import net.minecraft.entity.effect.StatusEffectCategory
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.registry.Registries
 import org.cneko.justarod.JRUtil.Companion.rodId
+import org.cneko.justarod.JRUtil.Companion.rodEffectUuid
 
 class SmearyEffect : StatusEffect(
     StatusEffectCategory.HARMFUL, // 类型为有害
@@ -17,9 +18,9 @@ class SmearyEffect : StatusEffect(
     init {
         this.addAttributeModifier(
             EntityAttributes.GENERIC_MOVEMENT_SPEED,
-            rodId("smeary"),
+            rodEffectUuid("smeary"),
             -0.15, // 速度减少 15% (0级时)，随等级提升
-            EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+            EntityAttributeModifier.Operation.MULTIPLY_TOTAL
         )
     }
 
@@ -28,7 +29,7 @@ class SmearyEffect : StatusEffect(
         return true
     }
 
-    override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int): Boolean {
+    override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int) {
         val world = entity.world
         val random = entity.random
 
@@ -70,11 +71,11 @@ class SmearyEffect : StatusEffect(
             if (entity.isSubmergedInWater) {
 
                 if (random.nextInt(40) == 0) { // 约每2秒判定一次
-                    entity.removeStatusEffect(Registries.STATUS_EFFECT.getEntry(this))
+                    entity.removeStatusEffect(this)
                 }
             }
         }
 
-        return super.applyUpdateEffect(entity, amplifier)
+        super.applyUpdateEffect(entity, amplifier)
     }
 }

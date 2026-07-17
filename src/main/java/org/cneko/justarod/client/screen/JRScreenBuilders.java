@@ -76,7 +76,8 @@ public class JRScreenBuilders {
                 int i = (new Random()).nextInt(13);
                 MinecraftClient.getInstance().player.sendMessage(Text.translatable("message.toneko.neko.breed_fail_baby." + i)); // FBI! Open door!
             } else {
-                ClientPlayNetworking.send(new PassiveMatingPayload(screen.getNeko().getEntity().getUuid().toString(), entity.getUuid().toString()));
+                PassiveMatingPayload payload = new PassiveMatingPayload(screen.getNeko().getEntity().getUuid().toString(), entity.getUuid().toString());
+                ClientPlayNetworking.send(PassiveMatingPayload.ID, payload.toBuf());
                 MinecraftClient.getInstance().setScreen(screen.lastScreen);
             }
         });
@@ -94,7 +95,8 @@ public class JRScreenBuilders {
             }
         });
         public static final ButtonFactory RAVENN_BREED_RECEIVING_BUTTON = screen -> ButtonWidget.builder(Text.translatable("screen.toneko.neko_entity_interactive.button.receiving"), (btn) -> {
-            ClientPlayNetworking.send(new RavennPassiveMatingPayload(screen.getNeko().getEntity().getUuid().toString(), screen.getNeko().getUuid().toString()));
+            RavennPassiveMatingPayload payload = new RavennPassiveMatingPayload(screen.getNeko().getEntity().getUuid().toString(), screen.getNeko().getUuid().toString());
+            ClientPlayNetworking.send(RavennPassiveMatingPayload.ID, payload.toBuf());
         });
     }
     public static final class JRTooltipFactories{

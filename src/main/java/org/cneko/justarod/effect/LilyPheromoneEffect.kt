@@ -17,11 +17,11 @@ class LilyPheromoneEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0xFFC0
     }
 
     // 每次触发时执行的具体逻辑
-    override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int): Boolean {
+    override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int) {
         super.applyUpdateEffect(entity, amplifier)
 
         // 仅在服务端处理数值和粒子
-        if (entity.world.isClient) return true
+        if (entity.world.isClient) return
 
         // 1. 基础治愈：微量回血 (百合的治愈之力)
         if (entity.health < entity.maxHealth) {
@@ -61,6 +61,5 @@ class LilyPheromoneEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0xFFC0
                 entity.excretion = max(0, entity.excretion - 20)
             }
         }
-        return true
     }
 }

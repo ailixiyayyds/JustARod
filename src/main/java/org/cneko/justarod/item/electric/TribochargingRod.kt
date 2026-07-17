@@ -14,7 +14,8 @@ class TribochargingRod(settings: Settings) : Item(settings){
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
         // 打开屏幕
         if (user is ServerPlayerEntity)
-        ServerPlayNetworking.send(user, FrictionPayload("a"))
+        val payload = FrictionPayload("a")
+        ServerPlayNetworking.send(user, FrictionPayload.ID, payload.toBuf())
         return super.use(world, user, hand)
     }
 }

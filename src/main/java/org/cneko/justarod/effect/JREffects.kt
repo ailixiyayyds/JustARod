@@ -10,97 +10,97 @@ class JREffects {
     companion object{
         var ORGASM_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "orgasm"),
+            Identifier(MODID, "orgasm"),
             OrgasmEffect()
         )
         var LUBRICATING_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "lubricating"),
+            Identifier(MODID, "lubricating"),
             LubricatingEffect()
         )
         var ESTRUS_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "estrus"),
+            Identifier(MODID, "estrus"),
             EstrusEffect()
         )
         var STRONG_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "strong"),
+            Identifier(MODID, "strong"),
             StrongEffect()
         )
         var FAINT_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "faint"),
+            Identifier(MODID, "faint"),
             FaintEffect()
         )
         var PREGNANT_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "pregnant"),
+            Identifier(MODID, "pregnant"),
             PregnantEffect()
         )
         var AIDS_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "aids"),
+            Identifier(MODID, "aids"),
             AIDSEffect()
         )
         val HPV_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "hpv"),
+            Identifier(MODID, "hpv"),
             HPVEffect()
         )
         val VAGINITIS_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "vaginitis"),
+            Identifier(MODID, "vaginitis"),
             VaginitisEffect()
         )
         val OVARIAN_CANCER_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "ovarian_cancer"),
+            Identifier(MODID, "ovarian_cancer"),
             OvarianCancerEffect()
         )
         val SYPHILIS_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "syphilis"),
+            Identifier(MODID, "syphilis"),
             SyphilisEffect()
         )
         val JUMP_NERF_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "jump_nerf"),
+            Identifier(MODID, "jump_nerf"),
             JumpNerfEffect()
         )
         val KENJA_TIME_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "kenja_time"),
+            Identifier(MODID, "kenja_time"),
             KenjaTimeEffect()
         )
         val SMEARY_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "smeary"),
+            Identifier(MODID, "smeary"),
             SmearyEffect()
         )
         val UTERINE_COLD_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "uterine_cold"),
+            Identifier(MODID, "uterine_cold"),
             UterineColdEffect()
         )
         val URETHRITIS_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "urethritis"),
+            Identifier(MODID, "urethritis"),
             UrethritisEffect()
         )
         val PROSTATITIS_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "prostatitis"),
+            Identifier(MODID, "prostatitis"),
             ProstatitisEffect()
         )
         val LILY_PHEROMONE_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "lily_pheromone"),
+            Identifier(MODID, "lily_pheromone"),
             LilyPheromoneEffect()
         )
         val PARONYCHIA_EFFECT: StatusEffect? = Registry.register(
             Registries.STATUS_EFFECT,
-            Identifier.of(MODID, "paronychia"),
+            Identifier(MODID, "paronychia"),
             ParonychiaEffect()
         )
         fun init(){

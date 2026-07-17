@@ -25,6 +25,17 @@ The remaining source migration is grouped around Minecraft 1.21 payload
 networking, data components/enchantments, registry entries and attributes,
 entity/rendering signatures, and tooltip/screen APIs.
 
+Completed source groups:
+
+- Fabric 1.20.1 play networking and property synchronization now use
+  `Identifier` channels with `PacketByteBuf` codecs.
+- Custom attributes and status-effect callbacks use the 1.20.1 registry and
+  modifier APIs.
+
+Minecraft 1.20.1 has no generic jump-strength or scale entity attributes.
+The associated jump/scale modifiers are temporarily inactive until equivalent
+behavioral fallbacks are implemented.
+
 ## License and attribution
 
 The original project and this backport are licensed under GPL-3.0. Copyright

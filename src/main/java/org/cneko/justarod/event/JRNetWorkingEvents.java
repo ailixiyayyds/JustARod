@@ -30,13 +30,14 @@ import java.util.UUID;
 
 public class JRNetWorkingEvents {
     public static void init(){
-        ServerPlayNetworking.registerGlobalReceiver(FullHeatPayload.ID, (payload,context) -> {
+        ServerPlayNetworking.registerGlobalReceiver(FullHeatPayload.ID, (server, player, handler, buf, responseSender) -> {
+            FullHeatPayload.read(buf);
             // 消耗体力
-            PlayerEntity player = context.player();
-            player.setPower(player.getPower()-80);
+            server.execute(() -> player.setPower(player.getPower()-80));
         });
-        ServerPlayNetworking.registerGlobalReceiver(MatePayload.ID,((payload, context) -> {
-            ServerPlayerEntity player = context.player();
+        ServerPlayNetworking.registerGlobalReceiver(MatePayload.ID,((server, player, handler, buf, responseSender) -> {
+            MatePayload payload = MatePayload.read(buf);
+            server.execute(() -> {
             // 计算概率（与量和时间成正比）
             double probability = payload.amount() * payload.time() / 150;
             if (probability >= 1 || Math.random() < probability) {
@@ -57,10 +58,12 @@ public class JRNetWorkingEvents {
                 player.setPower(player.getPower()-payload.amount()*5);
                 player.sendMessage(Text.of("§c配种失败！"));
             }
+            });
         }));
 
-        ServerPlayNetworking.registerGlobalReceiver(PassiveMatingPayload.ID,((payload, context) -> {
-            ServerPlayerEntity player = context.player();
+        ServerPlayNetworking.registerGlobalReceiver(PassiveMatingPayload.ID,((server, player, handler, buf, responseSender) -> {
+            PassiveMatingPayload payload = PassiveMatingPayload.read(buf);
+            server.execute(() -> {
             try {
                 UUID nekoUuid = UUID.fromString(payload.uuid());
                 NekoEntity neko = ToNekoNetworkEvents.findNearbyNekoByUuid(player, nekoUuid,32);
@@ -94,10 +97,12 @@ public class JRNetWorkingEvents {
                     TickTasks.add(queue);
                 }
             }catch (Exception ignored){}
+            });
         }));
 
-        ServerPlayNetworking.registerGlobalReceiver(RavennPassiveMatingPayload.ID,(payload,context)->{
-            ServerPlayerEntity player = context.player();
+        ServerPlayNetworking.registerGlobalReceiver(RavennPassiveMatingPayload.ID,(server, player, handler, buf, responseSender)->{
+            RavennPassiveMatingPayload payload = RavennPassiveMatingPayload.read(buf);
+            server.execute(() -> {
             try {
                 UUID nekoUuid = UUID.fromString(payload.uuid());
                 NekoEntity neko = ToNekoNetworkEvents.findNearbyNekoByUuid(player, nekoUuid,16);
@@ -130,6 +135,7 @@ public class JRNetWorkingEvents {
                     }
                 }
             }catch (Exception ignored){}
+            });
         });
     }
 }

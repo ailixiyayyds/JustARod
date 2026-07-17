@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.network.RegistryByteBuf
 import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
@@ -19,8 +18,8 @@ abstract class JRProperty<T>(
     val setter: (Pregnant, T) -> Unit // 如何设置到实体
 ) {
     // === 网络同步部分 ===
-    abstract fun writeToBuf(buf: RegistryByteBuf, value: T): PacketByteBuf?
-    abstract fun readFromBuf(buf: RegistryByteBuf): T
+    abstract fun writeToBuf(buf: PacketByteBuf, value: T): PacketByteBuf?
+    abstract fun readFromBuf(buf: PacketByteBuf): T
 
     // === UI 渲染部分 ===
     abstract fun formatValue(value: T): String

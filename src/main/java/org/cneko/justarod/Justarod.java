@@ -1,7 +1,6 @@
 package org.cneko.justarod;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import org.cneko.justarod.api.NetWorkingRodData;
 import org.cneko.justarod.block.JRBlocks;
 import org.cneko.justarod.command.JRCommands;

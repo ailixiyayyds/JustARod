@@ -1,17 +1,8 @@
 package org.cneko.justarod.packet;
 
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-
 public class JRPackets {
     public static void init(){
-        PayloadTypeRegistry.playS2C().register(FrictionPayload.ID, FrictionPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(FullHeatPayload.ID, FullHeatPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(JRSyncPayload.ID, JRSyncPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(MatePayload.ID, MatePayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(PassiveMatingPayload.ID, PassiveMatingPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(RavennPassiveMatingPayload.ID,RavennPassiveMatingPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(BDSMPayload.ID, BDSMPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(MedicalPayload.ID, MedicalPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(XRayScanScreenPayload.ID, XRayScanScreenPayload.CODEC);
+        // Fabric 1.20.1 identifies play channels directly by Identifier. Packet
+        // codecs live on the send/receive sites, so there is no payload registry.
     }
 }

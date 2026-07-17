@@ -9,9 +9,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.entity.EntityType
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.network.RegistryByteBuf
-import net.minecraft.network.codec.PacketCodecs
-import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.Registries
 import net.minecraft.server.command.ServerCommandSource
 import org.cneko.justarod.entity.Pregnant
 import java.util.Optional
@@ -25,8 +23,11 @@ class JRBoolProperty(
     val isDisease: Boolean = false // 如果是疾病，"是"会变成红色
 ) : JRProperty<Boolean>(name, displayName, getter, setter) {
 
-    override fun writeToBuf(buf: RegistryByteBuf, value: Boolean) = buf.writeBoolean(value)
-    override fun readFromBuf(buf: RegistryByteBuf): Boolean = buf.readBoolean()
+    override fun writeToBuf(buf: PacketByteBuf, value: Boolean): PacketByteBuf {
+        buf.writeBoolean(value)
+        return buf
+    }
+    override fun readFromBuf(buf: PacketByteBuf): Boolean = buf.readBoolean()
     override fun getArgumentType() = BoolArgumentType.bool()
     override fun getArgumentFromContext(ctx: CommandContext<ServerCommandSource>) = BoolArgumentType.getBool(ctx, "value")
 
@@ -45,8 +46,11 @@ class JRTimeProperty(
     val isDisease: Boolean = false
 ) : JRProperty<Int>(name, displayName, getter, setter) {
 
-    override fun writeToBuf(buf: RegistryByteBuf, value: Int) = buf.writeVarInt(value)
-    override fun readFromBuf(buf: RegistryByteBuf): Int = buf.readVarInt()
+    override fun writeToBuf(buf: PacketByteBuf, value: Int): PacketByteBuf {
+        buf.writeVarInt(value)
+        return buf
+    }
+    override fun readFromBuf(buf: PacketByteBuf): Int = buf.readVarInt()
     override fun getArgumentType() = IntegerArgumentType.integer(0)
     override fun getArgumentFromContext(ctx: CommandContext<ServerCommandSource>) = IntegerArgumentType.getInteger(ctx, "value")
 
@@ -67,8 +71,11 @@ class JRIntProperty(
     name: String, displayName: String,
     getter: (Pregnant) -> Int, setter: (Pregnant, Int) -> Unit
 ) : JRProperty<Int>(name, displayName, getter, setter) {
-    override fun writeToBuf(buf: RegistryByteBuf, value: Int): PacketByteBuf? = buf.writeVarInt(value)
-    override fun readFromBuf(buf: RegistryByteBuf): Int = buf.readVarInt()
+    override fun writeToBuf(buf: PacketByteBuf, value: Int): PacketByteBuf {
+        buf.writeVarInt(value)
+        return buf
+    }
+    override fun readFromBuf(buf: PacketByteBuf): Int = buf.readVarInt()
     override fun getArgumentType(): IntegerArgumentType = IntegerArgumentType.integer(0)
     override fun getArgumentFromContext(ctx: CommandContext<ServerCommandSource>) = IntegerArgumentType.getInteger(ctx, "value")
     override fun formatValue(value: Int): String = value.toString()
@@ -79,8 +86,11 @@ class JRFloatProperty(
     name: String, displayName: String,
     getter: (Pregnant) -> Float, setter: (Pregnant, Float) -> Unit
 ) : JRProperty<Float>(name, displayName, getter, setter) {
-    override fun writeToBuf(buf: RegistryByteBuf, value: Float) = buf.writeFloat(value)
-    override fun readFromBuf(buf: RegistryByteBuf): Float = buf.readFloat()
+    override fun writeToBuf(buf: PacketByteBuf, value: Float): PacketByteBuf {
+        buf.writeFloat(value)
+        return buf
+    }
+    override fun readFromBuf(buf: PacketByteBuf): Float = buf.readFloat()
     override fun getArgumentType() = FloatArgumentType.floatArg(0f)
     override fun getArgumentFromContext(ctx: CommandContext<ServerCommandSource>) = FloatArgumentType.getFloat(ctx, "value")
     override fun formatValue(value: Float): String = String.format("%.2f", value)
@@ -91,8 +101,11 @@ class JRDoubleProperty(
     name: String, displayName: String,
     getter: (Pregnant) -> Double, setter: (Pregnant, Double) -> Unit
 ) : JRProperty<Double>(name, displayName, getter, setter) {
-    override fun writeToBuf(buf: RegistryByteBuf, value: Double) = buf.writeDouble(value)
-    override fun readFromBuf(buf: RegistryByteBuf): Double = buf.readDouble()
+    override fun writeToBuf(buf: PacketByteBuf, value: Double): PacketByteBuf {
+        buf.writeDouble(value)
+        return buf
+    }
+    override fun readFromBuf(buf: PacketByteBuf): Double = buf.readDouble()
     override fun getArgumentType() = DoubleArgumentType.doubleArg(0.0)
     override fun getArgumentFromContext(ctx: CommandContext<ServerCommandSource>) = DoubleArgumentType.getDouble(ctx, "value")
     override fun formatValue(value: Double): String = String.format("%.2f", value)
@@ -104,14 +117,14 @@ class JREntityTypeProperty(
     getter: (Pregnant) -> Optional<EntityType<*>>,
     setter: (Pregnant, Optional<EntityType<*>>) -> Unit
 ) : JRProperty<Optional<EntityType<*>>>(name, displayName, getter, setter) {
-    override fun writeToBuf(buf: RegistryByteBuf, value: Optional<EntityType<*>>): PacketByteBuf? {
-        PacketCodecs.optional(PacketCodecs.registryValue(RegistryKeys.ENTITY_TYPE))
-            .encode(buf, value)
+    override fun writeToBuf(buf: PacketByteBuf, value: Optional<EntityType<*>>): PacketByteBuf? {
+        buf.writeBoolean(value.isPresent)
+        value.ifPresent { buf.writeIdentifier(Registries.ENTITY_TYPE.getId(it)) }
         return buf
     }
-    override fun readFromBuf(buf: RegistryByteBuf): Optional<EntityType<*>> {
-        return PacketCodecs.optional(PacketCodecs.registryValue(RegistryKeys.ENTITY_TYPE))
-            .decode(buf)
+    override fun readFromBuf(buf: PacketByteBuf): Optional<EntityType<*>> {
+        if (!buf.readBoolean()) return Optional.empty()
+        return Registries.ENTITY_TYPE.getOrEmpty(buf.readIdentifier()).map { it as EntityType<*> }
     }
     override fun getArgumentType(): ArgumentType<Optional<EntityType<*>>> {
         throw UnsupportedOperationException("实体类型暂不支持自动生成命令参数")

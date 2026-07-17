@@ -594,7 +594,8 @@ class PregnantCommand {
             val uterusCmd = literal("uterus")
             buildSelfAndTarget(uterusCmd) { p, s ->
                 if (p.hasUterus() && s.entity is ServerPlayerEntity) {
-                    ServerPlayNetworking.send(s.entity as ServerPlayerEntity, XRayScanScreenPayload(ScanType.UTERUS, (p as Entity).id))
+                    val payload = XRayScanScreenPayload(ScanType.UTERUS, (p as Entity).id)
+                    ServerPlayNetworking.send(s.entity as ServerPlayerEntity, XRayScanScreenPayload.ID, payload.toBuf())
                 }
             }
             cmd.then(uterusCmd)

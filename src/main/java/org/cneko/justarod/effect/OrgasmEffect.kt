@@ -42,7 +42,7 @@ class OrgasmEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0xe9b8b3) {
     }
 
     // 这个方法在应用药水效果时的每个tick会被调用。
-    override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int): Boolean {
+    override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int) {
         val world = entity.world
         val random: Random = world.random
         // 添加爱心效果
@@ -82,6 +82,6 @@ class OrgasmEffect : StatusEffect(StatusEffectCategory.BENEFICIAL, 0xe9b8b3) {
                 Messaging.modifyAndSendMessageToAll(entity,screamTexts[random.nextInt(screamTexts.size)])
             }
         }
-        return super.applyUpdateEffect(entity, amplifier)
+        super.applyUpdateEffect(entity, amplifier)
     }
 }

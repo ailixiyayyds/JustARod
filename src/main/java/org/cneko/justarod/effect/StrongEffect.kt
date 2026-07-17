@@ -13,7 +13,7 @@ class StrongEffect: StatusEffect(StatusEffectCategory.BENEFICIAL, 0xffb6c1) {
     }
 
     // 这个方法在应用药水效果时的每个tick会被调用。
-    override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int): Boolean {
+    override fun applyUpdateEffect(entity: LivingEntity, amplifier: Int) {
         // 如果有虚弱的效果，则取消该效果。
         if (entity.hasStatusEffect(StatusEffects.WEAKNESS)) {
             entity.removeStatusEffect(StatusEffects.WEAKNESS)
@@ -22,6 +22,6 @@ class StrongEffect: StatusEffect(StatusEffectCategory.BENEFICIAL, 0xffb6c1) {
         if (entity is Powerable){
             entity.power += 0.03 * (amplifier+1)
         }
-        return super.applyUpdateEffect(entity, amplifier)
+        super.applyUpdateEffect(entity, amplifier)
     }
 }
