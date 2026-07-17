@@ -3,11 +3,11 @@ package org.cneko.justarod.api
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import net.minecraft.client.MinecraftClient
-import net.minecraft.text.Text
-import org.cneko.ctlib.common.network.HttpGet.HttpGetObject
-import java.util.HashMap
+import com.google.gson.JsonParser
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
 
 class NetWorkingRodData {
     companion object{
@@ -21,19 +21,19 @@ class NetWorkingRodData {
          fun update() {
              val scope = CoroutineScope(Dispatchers.IO)
              scope.launch {
-                 val req = HttpGetObject(URL)
-                 req.let {
-                     it.get()
-                     val json = it.json
-                     MAX_DAMAGE = json.getInt("max_damage")
-                     SPEED = json.getInt("speed")
+                 try {
+                     val request = HttpRequest.newBuilder(URI.create(URL)).GET().build()
+                     val response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString())
+                     if (response.statusCode() in 200..299) {
+                         val json = JsonParser.parseString(response.body()).asJsonObject
+                         MAX_DAMAGE = json.get("max_damage")?.asInt ?: MAX_DAMAGE
+                         SPEED = json.get("speed")?.asInt ?: SPEED
+                     }
+                 } catch (_: Exception) {
+                     // Remote tuning is optional; retain safe local defaults offline.
                  }
-                 if (MAX_DAMAGE == 0){
-                     MAX_DAMAGE = 1000
-                 }
-                 if (SPEED == 0){
-                     SPEED = 1
-                 }
+                 if (MAX_DAMAGE == 0) MAX_DAMAGE = 1000
+                 if (SPEED == 0) SPEED = 1
              }
         }
     }
