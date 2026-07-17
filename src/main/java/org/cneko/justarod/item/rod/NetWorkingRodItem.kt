@@ -1,6 +1,5 @@
 package org.cneko.justarod.item.rod
 
-import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
@@ -22,20 +21,17 @@ class NetWorkingRodItem: SelfUsedItem(Settings().maxCount(1).maxDamage(NetWorkin
         return super.useOnBlock(context)
     }
 
-    override fun onCraft(stack: ItemStack?, world: World?) {
-        super.onCraft(stack, world)
-        stack?.set(DataComponentTypes.MAX_DAMAGE, NetWorkingRodData.MAX_DAMAGE)
+    override fun onCraft(stack: ItemStack, world: World, player: PlayerEntity) {
+        super.onCraft(stack, world, player)
+        updateData(player, stack)
     }
 
     fun updateData(player: PlayerEntity?,stack: ItemStack?){
         NetWorkingRodData.update()
-        stack?.set(DataComponentTypes.MAX_DAMAGE, NetWorkingRodData.MAX_DAMAGE)
         player?.sendMessage(Text.translatable("item.justarod.networking_rod.update"),true)
     }
 
     override fun getDefaultStack(): ItemStack {
-        val stack = super.getDefaultStack()
-        stack.set(DataComponentTypes.MAX_DAMAGE, NetWorkingRodData.MAX_DAMAGE)
-        return stack
+        return super.getDefaultStack()
     }
 }

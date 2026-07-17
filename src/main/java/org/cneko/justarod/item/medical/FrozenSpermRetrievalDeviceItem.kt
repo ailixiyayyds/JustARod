@@ -17,7 +17,7 @@ import org.cneko.justarod.item.*
 class FrozenSpermRetrievalDeviceItem(settings: Settings) : SpermRetrievalDeviceItem(36000, settings) {
 
     // 食用时间加倍
-    override fun getMaxUseTime(stack: ItemStack, user: LivingEntity): Int = 64
+    override fun getMaxUseTime(stack: ItemStack): Int = 64
 
     // 食用逻辑（使用方效果）
     override fun finishUsing(stack: ItemStack, world: World, user: LivingEntity): ItemStack {

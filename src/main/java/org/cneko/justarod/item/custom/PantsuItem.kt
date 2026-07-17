@@ -7,7 +7,6 @@ import net.minecraft.item.ArmorItem
 import net.minecraft.item.ArmorMaterial
 import net.minecraft.item.ItemStack
 import net.minecraft.client.item.TooltipContext
-import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.world.World
@@ -18,7 +17,7 @@ import org.cneko.justarod.item.JRComponents.PantsuState
 嗯... 好变态，偷人家胖次
  */
 class PantsuItem(
-    material: RegistryEntry<ArmorMaterial>,
+    material: ArmorMaterial,
     type: Type,
     settings: Settings
 ) : ArmorItem(material, type, settings) {

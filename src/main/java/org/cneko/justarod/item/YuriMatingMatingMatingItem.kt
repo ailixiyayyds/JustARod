@@ -4,12 +4,13 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.Rarity
+import net.minecraft.world.World
 import org.cneko.justarod.entity.Pregnant
 
 class YuriMatingMatingMatingItem: Item(Settings().maxCount(1).rarity(Rarity.RARE)) {
@@ -34,9 +35,9 @@ class YuriMatingMatingMatingItem: Item(Settings().maxCount(1).rarity(Rarity.RARE
         return super.useOnEntity(stack, user, entity, hand)
     }
 
-    override fun appendTooltip(stack: ItemStack?, context: TooltipContext?, tooltip: MutableList<Text?>?, type: TooltipType?) {
-        super.appendTooltip(stack, context, tooltip, type)
-        tooltip?.add(Text.of("§d对着她来吧"))
-        tooltip?.add(Text.of("§d一起产生百合之间爱の结晶"))
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        super.appendTooltip(stack, world, tooltip, context)
+        tooltip.add(Text.of("§d对着她来吧"))
+        tooltip.add(Text.of("§d一起产生百合之间爱の结晶"))
     }
 }

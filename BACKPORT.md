@@ -35,6 +35,9 @@ Completed source groups:
   shared Kotlin and Java accessors for save and packet compatibility.
 - Core entities, tracked data, AI goals, GeckoLib animation controllers, and
   entity renderers now use their Minecraft 1.20.1/GeckoLib 4.4 interfaces.
+- All Kotlin sources now compile against Minecraft 1.20.1. Food definitions,
+  armor materials, tooltips, item state, and legacy item callbacks have been
+  migrated; Java and Mixin source migration remains in progress.
 
 Minecraft 1.20.1 has no generic jump-strength or scale entity attributes.
 The associated jump/scale modifiers are temporarily inactive until equivalent

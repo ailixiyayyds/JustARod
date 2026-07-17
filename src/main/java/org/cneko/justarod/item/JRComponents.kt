@@ -33,9 +33,14 @@ class JRComponents {
             { nbt -> if (nbt.contains(name)) nbt.getBoolean(name) else null },
             { nbt, value -> nbt.putBoolean(name, value) })
 
+        private fun identifierKey(name: String) = JRComponentKey<Identifier>(name,
+            { nbt -> if (nbt.contains(name)) Identifier.tryParse(nbt.getString(name)) else null },
+            { nbt, value -> nbt.putString(name, value.toString()) })
+
         val USED_TIME_MARK = intKey("JustARodUsedTime")
         val OWNER = stringKey("JustARodOwner")
         val SPEED = intKey("JustARodSpeed")
+        val ITEM_ID = identifierKey("JustARodItemId")
         val MODE = stringKey("JustARodMode")
         val SECRETIONS_APPEARANCE = stringKey("JustARodSecretionsAppearance")
         val COLLECTED_TIME = intKey("JustARodCollectedTime")

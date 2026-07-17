@@ -13,7 +13,6 @@ import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.*
-import net.minecraft.text.PlainTextContent.Literal
 import net.minecraft.util.Formatting
 import org.cneko.justarod.entity.JREntities
 import org.cneko.justarod.entity.SeeeeexNekoEntity
@@ -67,10 +66,10 @@ class MateCommand {
             }
 
             // 创建可变文本对象
-            val requestMessage: MutableText = MutableText.of(Literal("§a${requester.name?.string}想要和您交配，是否同意？ "))
+            val requestMessage: MutableText = Text.literal("§a${requester.name?.string}想要和您交配，是否同意？ ")
 
             // 创建同意按钮
-            val acceptButton: MutableText = MutableText.of(Literal("§2[同意]"))
+            val acceptButton: MutableText = Text.literal("§2[同意]")
             acceptButton.style = acceptButton.style
                 .withClickEvent(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mate accept"))
                 .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("点击同意")))
@@ -78,7 +77,7 @@ class MateCommand {
 
             if (!force) {
                 // 创建拒绝按钮
-                val denyButton: MutableText = MutableText.of(Literal(" §c[拒绝]"))
+                val denyButton: MutableText = Text.literal(" §c[拒绝]")
                 denyButton.style = denyButton.style
                     .withClickEvent(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mate deny"))
                     .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("点击拒绝")))

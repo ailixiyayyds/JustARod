@@ -30,7 +30,7 @@ class GiantRodItem: OtherUsedItem(Settings().maxCount(1).maxDamage(1000).compone
         }
         // 给目标实体高潮效果
         JREffects.ORGASM_EFFECT?.let {
-            val orgasm = StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(it), 100, 0)
+            val orgasm = StatusEffectInstance(it, 100, 0)
             target.addStatusEffect(orgasm)
         }
         // 掉一颗龙蛋

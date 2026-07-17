@@ -1,7 +1,5 @@
 package org.cneko.justarod.item.medical
 
-import net.minecraft.component.DataComponentTypes
-import net.minecraft.component.type.ProfileComponent
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -147,7 +145,7 @@ class ScalpelItem(settings: Settings) : MedicalItem(settings.maxCount(1).maxDama
                 target.damage(target.world.damageSources.generic(), 1000f)
                 if (target.random.nextBoolean()) {
                     val head = Items.PLAYER_HEAD.defaultStack
-                    head.set(DataComponentTypes.PROFILE, ProfileComponent(target.gameProfile))
+                    head.orCreateNbt.putString("SkullOwner", target.gameProfile.name)
                     target.dropStack(head)
                 } else {
                     target.dropStack(Items.BONE.defaultStack)
@@ -173,7 +171,7 @@ class ScalpelItem(settings: Settings) : MedicalItem(settings.maxCount(1).maxDama
         target.damage(target.world.damageSources.generic(), 10f)
         target.addStatusEffect(StatusEffectInstance(StatusEffects.SLOWNESS, 600, 1))
         target.addStatusEffect(StatusEffectInstance(StatusEffects.MINING_FATIGUE, 600, 1))
-        target.addStatusEffect(StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(JREffects.FAINT_EFFECT), 300, 1))
+        target.addStatusEffect(StatusEffectInstance(JREffects.FAINT_EFFECT, 300, 1))
 
         // 根据附魔执行特定效果
         if (stack.containsEnchantment(JREnchantments.HYSTERECTOMY)) {
@@ -242,7 +240,7 @@ class ScalpelItem(settings: Settings) : MedicalItem(settings.maxCount(1).maxDama
      * 消耗手术刀的耐久度
      */
     override fun consumeItem(user: PlayerEntity, target: LivingEntity, stack: ItemStack, hand: Hand) {
-        stack.damage(1, user, EquipmentSlot.MAINHAND)
+        stack.damage(1, user) { it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND) }
     }
 
     /**

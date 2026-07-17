@@ -1,10 +1,10 @@
 package org.cneko.justarod.item.rod
 
-import net.minecraft.component.type.FoodComponent
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.passive.FoxEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.item.FoodComponent
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvent
@@ -19,7 +19,7 @@ import org.cneko.justarod.item.*
 其实用过之后味道是有点酸的，也会有点咸咸的，你要喜欢可以舔舔，虽然可能有点细菌，不过不是不能接受
 （自己的就算了，毕竟... 不太好吃... 甚至有点难以下口）
  */
-class EatableRodItem: SelfUsedItem(Settings().food(FoodComponent.Builder().nutrition(1).saturationModifier(0.2f).build()).component(
+class EatableRodItem: SelfUsedItem(Settings().food(FoodComponent.Builder().hunger(1).saturationModifier(0.2f).build()).component(
     JRComponents.Companion.USED_TIME_MARK, 0).maxDamage(200)){
     override fun finishUsing(stack: ItemStack?, world: World, user: LivingEntity): ItemStack {
         val itemStack = super.finishUsing(stack, world, user)
@@ -48,7 +48,7 @@ class EatableRodItem: SelfUsedItem(Settings().food(FoodComponent.Builder().nutri
                         soundCategory = SoundCategory.PLAYERS
                     }
 
-                    world.playSound(null as PlayerEntity?, user.x, user.y, user.z, soundEvent, soundCategory)
+                    world.playSound(null as PlayerEntity?, user.x, user.y, user.z, soundEvent, soundCategory, 1.0f, 1.0f)
                     user.onLanding()
                     break
                 }
@@ -56,7 +56,6 @@ class EatableRodItem: SelfUsedItem(Settings().food(FoodComponent.Builder().nutri
 
             if (user is PlayerEntity) {
                 val playerEntity = user
-                playerEntity.clearCurrentExplosion()
                 playerEntity.itemCooldownManager[this] = 20
             }
         }

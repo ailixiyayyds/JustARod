@@ -7,7 +7,6 @@ import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.particle.DustParticleEffect
 import net.minecraft.particle.ParticleEffect
 import net.minecraft.particle.ParticleTypes
@@ -42,7 +41,7 @@ open class WhipItem(settings: Settings) : Item(settings.maxCount(1).maxDamage(10
         if (world.isClient && selected && entity is PlayerEntity && entity.isUsingItem && entity.activeItemStack == stack) {
             val useTicks = entity.itemUseTime
             val chargeRatio =
-                min((getMaxUseTime(stack, entity) - useTicks).toDouble() / getMaxUseTime(stack, entity), 1.0)
+                min((getMaxUseTime(stack) - useTicks).toDouble() / getMaxUseTime(stack), 1.0)
 
             val particleCount = (2 + 4 * chargeRatio).toInt()
             val yawRad = Math.toRadians(entity.yaw.toDouble())
@@ -83,15 +82,15 @@ open class WhipItem(settings: Settings) : Item(settings.maxCount(1).maxDamage(10
         return UseAction.BOW
     }
 
-    override fun getMaxUseTime(stack: ItemStack?, user: LivingEntity?): Int {
+    override fun getMaxUseTime(stack: ItemStack): Int {
         return 30
     }
 
     override fun onStoppedUsing(stack: ItemStack, world: World, user: LivingEntity, remainingUseTicks: Int) {
         if (user !is PlayerEntity) return
 
-        val chargedTicks = getMaxUseTime(stack, user) - remainingUseTicks
-        val chargeRatio = min(chargedTicks / getMaxUseTime(stack, user).toDouble(), 1.0)
+        val chargedTicks = getMaxUseTime(stack) - remainingUseTicks
+        val chargeRatio = min(chargedTicks / getMaxUseTime(stack).toDouble(), 1.0)
 
         val range = 4.0 + 4.0 * chargeRatio
         val knockback = 0.4 + 0.6 * chargeRatio
@@ -105,7 +104,7 @@ open class WhipItem(settings: Settings) : Item(settings.maxCount(1).maxDamage(10
         world.playSound(null, user.blockPos, SoundEvents.ENTITY_FISHING_BOBBER_RETRIEVE, SoundCategory.PLAYERS, 1.0f, 0.8f + 0.4f * chargeRatio.toFloat())
         world.playSound(null, user.blockPos, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 0.8f, 1.0f)
 
-        stack.damage(2 + (chargeRatio * 2).toInt(), user, EquipmentSlot.MAINHAND)
+        stack.damage(2 + (chargeRatio * 2).toInt(), user) { it.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND) }
     }
 
     private fun applyWhipEffect(

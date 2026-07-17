@@ -9,13 +9,13 @@ import net.minecraft.entity.passive.*
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.registry.Registries
-import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
+import net.minecraft.world.World
 import net.minecraft.util.DyeColor
 import net.minecraft.util.Hand
 import org.cneko.justarod.JREnchantments
@@ -163,7 +163,7 @@ class ParthenogenesisCatalystItem(settings: Settings) : Item(settings) {
         if (baby is CatEntity && parent is CatEntity && variance > 0) {
             val breedCount = Registries.CAT_VARIANT.count()
             val randomBreed = baby.random.nextInt(breedCount)
-            baby.variant = Registries.CAT_VARIANT.getEntry(randomBreed).getOrDefault(parent.variant)
+            baby.variant = Registries.CAT_VARIANT.get(randomBreed) ?: parent.variant
         }
 
         return baby
@@ -182,18 +182,17 @@ class ParthenogenesisCatalystItem(settings: Settings) : Item(settings) {
         val newGrowthTime = (baseGrowthTime * growthMultiplier).toInt()
         baby.setBreedingAge(-newGrowthTime)
 
-        val attributes: MutableList<RegistryEntry<EntityAttribute?>?> = ArrayList<RegistryEntry<EntityAttribute?>?>()
+        val attributes: MutableList<EntityAttribute> = ArrayList()
         // 始终可选的其他属性
         attributes.add(EntityAttributes.GENERIC_ATTACK_DAMAGE)
         attributes.add(EntityAttributes.GENERIC_MOVEMENT_SPEED)
-        attributes.add(EntityAttributes.GENERIC_SCALE)
 
 
         // 随机决定额外选择几个属性（0~3个），总变异数为 1~4（因为生命值必选）
         val extraCount = random.nextInt(4) // 0, 1, 2, or 3
         // 打乱并选取 extraCount 个其他属性
         attributes.shuffle(Random)
-        val selected: MutableList<RegistryEntry<EntityAttribute?>?> = ArrayList<RegistryEntry<EntityAttribute?>?>()
+        val selected: MutableList<EntityAttribute> = ArrayList()
         selected.add(EntityAttributes.GENERIC_MAX_HEALTH) // 必选
         selected.addAll(attributes.subList(0, extraCount))
         // 应用变异
@@ -208,7 +207,6 @@ class ParthenogenesisCatalystItem(settings: Settings) : Item(settings) {
         // 3. 为马类动物应用属性变异
         if (baby is AbstractHorseEntity) {
             applyAttributeVariance(baby, EntityAttributes.GENERIC_MOVEMENT_SPEED, variance)
-            applyAttributeVariance(baby, EntityAttributes.GENERIC_JUMP_STRENGTH, variance)
         }
 
 
@@ -217,7 +215,7 @@ class ParthenogenesisCatalystItem(settings: Settings) : Item(settings) {
 
     private fun applyAttributeVariance(
         entity: LivingEntity,
-        attribute: RegistryEntry<EntityAttribute?>?,
+        attribute: EntityAttribute,
         variance: Float
     ) {
         val instance = entity.getAttributeInstance(attribute)
@@ -252,13 +250,13 @@ class ParthenogenesisCatalystItem(settings: Settings) : Item(settings) {
     }
 
     override fun appendTooltip(
-        stack: ItemStack?,
-        context: TooltipContext?,
-        tooltip: MutableList<Text>?,
-        type: TooltipType?
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
     ) {
-        tooltip?.add(Text.of("§7对着拥有生物使用，以进行孤雌生殖。"))
-        tooltip?.add(Text.of("§7默认进行无性克隆，添加减数分裂附魔可使后代属性产生变异"))
-        super.appendTooltip(stack, context, tooltip, type)
+        tooltip.add(Text.of("§7对着拥有生物使用，以进行孤雌生殖。"))
+        tooltip.add(Text.of("§7默认进行无性克隆，添加减数分裂附魔可使后代属性产生变异"))
+        super.appendTooltip(stack, world, tooltip, context)
     }
 }

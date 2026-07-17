@@ -30,7 +30,7 @@ class FreeMatingItem(settings: Settings): Item(settings) {
                     user.sendMessage(Text.of("§a交配完成！"))
                     user.sendMessage(Text.of("§b你怀上了${Text.translatable(entity?.type?.translationKey).string}的宝宝哦~"))
                     // 获取对方的负面buff
-                    val effects = entity?.statusEffects?.filter { !it.effectType.value().isBeneficial }
+                    val effects = entity?.statusEffects?.filter { !it.effectType.isBeneficial }
                     if (effects?.isEmpty() == false) {
                         for (effect in effects) {
                             user.addStatusEffect(effect)

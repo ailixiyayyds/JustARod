@@ -1,25 +1,17 @@
 package org.cneko.justarod.item.bdsm
 
-import net.fabricmc.fabric.api.item.v1.EnchantingContext
-import net.minecraft.component.DataComponentTypes
-import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.registry.BuiltinRegistries
-import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKeys
-import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 import org.cneko.justarod.entity.BDSMable
-import kotlin.jvm.optionals.getOrNull
 
 abstract class AbstractBDSMItem(
     settings: Settings,
@@ -77,12 +69,7 @@ abstract class AbstractBDSMItem(
 
     private fun getExtendedDuration(stack: ItemStack?): Int {
         if (stack == null) return durationTicks
-        var unbreaking = 0
-        stack.components.get(DataComponentTypes.ENCHANTMENTS)?.enchantmentEntries?.forEach { entry ->
-            if (entry.key.key.getOrNull() == Enchantments.UNBREAKING) {
-                unbreaking = EnchantmentHelper.getLevel(entry.key, stack)
-            }
-        }
+        val unbreaking = EnchantmentHelper.getLevel(Enchantments.UNBREAKING, stack)
         if (unbreaking > 0) {
             return durationTicks + durationTicks / 2 * unbreaking
         }
@@ -95,14 +82,6 @@ abstract class AbstractBDSMItem(
 
     override fun getEnchantability(): Int {
         return 10 // 附魔能力，数值越高越容易获得高级附魔
-    }
-
-    override fun canBeEnchantedWith(
-        stack: ItemStack?,
-        enchantment: RegistryEntry<Enchantment?>?,
-        context: EnchantingContext?
-    ): Boolean {
-        return super.canBeEnchantedWith(stack, enchantment, context) || enchantment?.key?.getOrNull() == Enchantments.UNBREAKING
     }
 
 }

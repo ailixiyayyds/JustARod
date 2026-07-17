@@ -5,7 +5,6 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ArmorMaterial
 import net.minecraft.item.ItemStack
-import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.world.World
 import org.cneko.justarod.client.renderer.armor.RodArmorRenderer
 import org.cneko.toneko.common.mod.items.NekoArmor
@@ -13,7 +12,7 @@ import org.cneko.toneko.common.mod.items.NekoArmor
 /*
 好玩嘿嘿
  */
-abstract class RodArmorItem<T : RodArmorItem<T>>(material: RegistryEntry<ArmorMaterial>?,settings: Settings) : NekoArmor<T>(material,
+abstract class RodArmorItem<T : RodArmorItem<T>>(material: ArmorMaterial, settings: Settings) : NekoArmor<T>(material,
     Type.CHESTPLATE,
     settings) {
 
@@ -27,7 +26,7 @@ abstract class RodArmorItem<T : RodArmorItem<T>>(material: RegistryEntry<ArmorMa
         // 降低耐久
         if (slot == 2){
             if (entity is LivingEntity) {
-                stack?.damage(1, entity, EquipmentSlot.CHEST)
+                stack?.damage(1, entity) { it.sendEquipmentBreakStatus(EquipmentSlot.CHEST) }
                 onUse(stack, world, entity, slot, selected)
             }
         }

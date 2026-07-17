@@ -2,7 +2,6 @@ package org.cneko.justarod.item
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
-import net.minecraft.component.type.FoodComponent
 import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
@@ -11,10 +10,10 @@ import net.minecraft.item.BoneMealItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
+import net.minecraft.item.FoodComponent
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
-import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import org.cneko.justarod.Justarod.MODID
@@ -59,7 +58,7 @@ class JRItems {
         val INSERTION_PEDESTAL = InsertionPedestalItem()
         val RETRIEVER = RetrieverItem()
         val SHENBAO = Item(Item.Settings().food(FoodComponent.Builder()
-            .nutrition(1).statusEffect(StatusEffectInstance(JREffects.STRONG_EFFECT.entry(), 6000,1,false,true),1f).alwaysEdible()
+            .hunger(1).statusEffect(StatusEffectInstance(JREffects.STRONG_EFFECT, 6000,1,false,true),1f).alwaysEdible()
             .build()))
         val FIREWORKS_ROD = FireworksRodItem()
         val TRIBOCHARGING_ROD = TribochargingRod(Item.Settings())
@@ -70,12 +69,12 @@ class JRItems {
         val SANITARY_TOWEL = SanitaryTowel(Item.Settings())
         val STERILIZATION_PILLS = SterilizationPills(Item.Settings())
         val BYT = Item(Item.Settings())
-        val MOLE = Item(Item.Settings().food(FoodComponent.Builder().nutrition(1)
+        val MOLE = Item(Item.Settings().food(FoodComponent.Builder().hunger(1)
             .statusEffect(StatusEffectInstance(StatusEffects.NAUSEA,10,0),1f).alwaysEdible().build()))
         val HPV_VACCINE = HPVVaccine(Item.Settings())
         val COTTON_SWAB = CottonSwabItem(Item.Settings().maxCount(1))
         val SCALPEL = ScalpelItem(Item.Settings())
-        val UTERUS = Item(Item.Settings().food(FoodComponent.Builder().nutrition(6).alwaysEdible().build()))
+        val UTERUS = Item(Item.Settings().food(FoodComponent.Builder().hunger(6).alwaysEdible().build()))
         val BRITH_CONTROLLING_PILL = BrithControllingPill(Item.Settings())
         val ABORtiON_PILL = AbortionPillItem(Item.Settings())
         val ESTROGEN = EstrogenItem(Item.Settings())
@@ -104,7 +103,7 @@ class JRItems {
         val HANDCUFFES_RING = Item(Item.Settings())
         val HANDCUFFES_CHAIN = Item(Item.Settings())
         val NO_MATING_PLZ = NoMatingPlz(Item.Settings())
-        val EXCREMENT = BoneMealItem(Item.Settings().food(FoodComponent.Builder().alwaysEdible().nutrition(1).statusEffect(
+        val EXCREMENT = BoneMealItem(Item.Settings().food(FoodComponent.Builder().alwaysEdible().hunger(1).statusEffect(
             StatusEffectInstance(StatusEffects.NAUSEA,200,0),1f).build()))
         val FEMALE_POTION = GenderChangePotionItem(Item.Settings(),GenderChangePotionItem.Gender.FEMALE)
         val MALE_POTION = GenderChangePotionItem(Item.Settings(), GenderChangePotionItem.Gender.MALE)
@@ -272,8 +271,4 @@ class JRItems {
             }
         }
     }
-}
-
-fun StatusEffect?.entry(): RegistryEntry<StatusEffect>? {
-    return Registries.STATUS_EFFECT.getEntry(this)
 }

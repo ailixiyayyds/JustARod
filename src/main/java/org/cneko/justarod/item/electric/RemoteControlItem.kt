@@ -4,7 +4,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.StackReference
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.registry.Registries
 import net.minecraft.screen.slot.Slot
 import net.minecraft.text.Text
@@ -12,7 +12,9 @@ import net.minecraft.util.ClickType
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
-import org.cneko.toneko.common.mod.misc.ToNekoComponents
+import org.cneko.justarod.item.JRComponents
+import org.cneko.justarod.item.get
+import org.cneko.justarod.item.set
 
 /*
 被别人远控会怎么样呢... 虽然咱没有过...
@@ -39,14 +41,14 @@ class RemoteControlItem(settings: Settings): Item(settings.maxCount(1)) {
             return super.onClicked(stack, otherStack, slot, clickType, player, cursorStackReference)
         }
         // 设置id
-        stack?.set(ToNekoComponents.ITEM_ID_COMPONENT, Registries.ITEM.getId(rodStack.item))
+        stack?.set(JRComponents.ITEM_ID, Registries.ITEM.getId(rodStack.item))
         return super.onClicked(stack, otherStack, slot, clickType, player, cursorStackReference)
     }
 
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack?>? {
         if (user?.isSneaking == true){
             val stack = user.getStackInHand(hand)
-            val id = stack?.get(ToNekoComponents.ITEM_ID_COMPONENT)
+            val id = stack?.get(JRComponents.ITEM_ID)
             if (id != null) {
                 val item = Registries.ITEM.get(id)
                 if (item is MultiModeSelfUsedElectricRodItem){
@@ -55,7 +57,7 @@ class RemoteControlItem(settings: Settings): Item(settings.maxCount(1)) {
             }
         }else if (user?.isSneaking == false){
             val stack = user.getStackInHand(hand)
-            val id = stack?.get(ToNekoComponents.ITEM_ID_COMPONENT)
+            val id = stack?.get(JRComponents.ITEM_ID)
             if (id != null) {
                 val item = Registries.ITEM.get(id)
                 if (item is MultiModeSelfUsedElectricRodItem) {
@@ -79,20 +81,20 @@ class RemoteControlItem(settings: Settings): Item(settings.maxCount(1)) {
         return super.use(world, user, hand)
     }
 
-    override fun appendTooltip(stack: ItemStack?, context: TooltipContext?, tooltip: MutableList<Text?>?, type: TooltipType?) {
-        val item = stack?.get(ToNekoComponents.ITEM_ID_COMPONENT)?.let {
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
+        val item = stack.get(JRComponents.ITEM_ID)?.let {
             Registries.ITEM.get(it)
         }
         if (item is MultiModeSelfUsedElectricRodItem){
             val mode = item.getTranslatableMode(item.getMode(stack)).string
-            tooltip?.add(Text.translatable("item.justarod.multi_mode_rods.current_mode", mode))
-            tooltip?.add(Text.translatable("item.justarod.multi_mode_rods.switch_mode"))
-            tooltip?.add(Text.translatable("item.justarod.multi_mode_rods.all_modes"))
+            tooltip.add(Text.translatable("item.justarod.multi_mode_rods.current_mode", mode))
+            tooltip.add(Text.translatable("item.justarod.multi_mode_rods.switch_mode"))
+            tooltip.add(Text.translatable("item.justarod.multi_mode_rods.all_modes"))
             item.getModes(stack).forEach {
-                tooltip?.add(item.getTranslatableMode(it))
+                tooltip.add(item.getTranslatableMode(it))
             }
 
         }
-        super.appendTooltip(stack, context, tooltip, type)
+        super.appendTooltip(stack, world, tooltip, context)
     }
 }

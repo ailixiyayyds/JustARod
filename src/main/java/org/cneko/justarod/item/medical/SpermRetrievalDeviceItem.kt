@@ -249,6 +249,6 @@ open class SpermRetrievalDeviceItem(val lifeTime: Int, settings: Settings) : Med
         return stack
     }
 
-    override fun getMaxUseTime(stack: ItemStack, user: LivingEntity): Int = 32
+    override fun getMaxUseTime(stack: ItemStack): Int = 32
     override fun getUseAction(stack: ItemStack): UseAction = UseAction.DRINK
 }

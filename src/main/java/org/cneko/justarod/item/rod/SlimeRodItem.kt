@@ -22,8 +22,8 @@ class SlimeRodItem : SelfUsedItem(Settings().maxCount(1).maxDamage(1000).compone
         if(super.useOnSelf(stack, world, entity, slot, selected) == ActionResult.SUCCESS){
             if(world is ServerWorld){
                 // 如果有发青效果，则去除
-                if(entity.hasStatusEffect(JREffects.ESTRUS_EFFECT.let { Registries.STATUS_EFFECT.getEntry(it) })){
-                    entity.removeStatusEffect(JREffects.ESTRUS_EFFECT.let { Registries.STATUS_EFFECT.getEntry(it) })
+                if(entity.hasStatusEffect(JREffects.ESTRUS_EFFECT)){
+                    entity.removeStatusEffect(JREffects.ESTRUS_EFFECT)
                 }
                 val serverWorld:ServerWorld = world
                 if (Random.create().nextInt(500) == 0) {

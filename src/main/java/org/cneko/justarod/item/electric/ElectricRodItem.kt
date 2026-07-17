@@ -1,8 +1,9 @@
 package org.cneko.justarod.item.electric
 
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.ItemStack
-import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
@@ -30,12 +31,12 @@ abstract class ElectricRodItem(settings: Settings) : EndRodItem(settings),Simple
     }
 
     override fun appendTooltip(
-        stack: ItemStack?,
-        context: TooltipContext?,
-        tooltip: MutableList<Text>?,
-        type: TooltipType?
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
     ) {
-        super.appendTooltip(stack, context, tooltip, type)
+        super.appendTooltip(stack, world, tooltip, context)
         val energy = getStoredEnergy(stack)
         val showEnergy: String = if (energy in 1000..1000000){
             "${energy / 1000}k"
@@ -52,12 +53,12 @@ abstract class ElectricRodItem(settings: Settings) : EndRodItem(settings),Simple
         }else{
             "$maxEnergy"
         }
-        tooltip?.add(Text.translatable("item.justarod.electric_rod.tooltip", showEnergy, maxShowEnergy).formatted(Formatting.GOLD))
+        tooltip.add(Text.translatable("item.justarod.electric_rod.tooltip", showEnergy, maxShowEnergy).formatted(Formatting.GOLD))
     }
 
-    override fun onCraft(stack: ItemStack?, world: World?) {
-        super.onCraft(stack, world)
-        stack?.damage = stack?.maxDamage!!
+    override fun onCraft(stack: ItemStack, world: World, player: PlayerEntity) {
+        super.onCraft(stack, world, player)
+        stack.damage = stack.maxDamage
     }
 
     override fun damage(stack: ItemStack, amount: Int, world: World?) {
@@ -85,14 +86,14 @@ abstract class ElectricRodItem(settings: Settings) : EndRodItem(settings),Simple
 abstract class SelfUsedElectricRodItem(settings: Settings) : ElectricRodItem(settings), SelfUsedItemInterface {
 
     override fun appendTooltip(
-        stack: ItemStack?,
-        context: TooltipContext?,
-        tooltip: MutableList<Text>?,
-        type: TooltipType?
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
     ) {
-        super.appendTooltip(stack, context, tooltip, type)
+        super.appendTooltip(stack, world, tooltip, context)
         val speed = this.getRodSpeed(stack)
-        tooltip?.add(Text.translatable("item.justarod.end_rod.speed", speed).formatted(Formatting.LIGHT_PURPLE))
+        tooltip.add(Text.translatable("item.justarod.end_rod.speed", speed).formatted(Formatting.LIGHT_PURPLE))
     }
     override fun inventoryTick(
         stack: ItemStack?,

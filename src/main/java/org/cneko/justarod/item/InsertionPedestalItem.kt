@@ -6,13 +6,14 @@ import net.minecraft.inventory.StackReference
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
-import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.registry.Registries
 import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 import org.cneko.justarod.damage.JRDamageTypes
 import org.cneko.justarod.entity.Insertable
 import org.cneko.justarod.item.rod.SelfUsedItemInterface
@@ -118,18 +119,18 @@ class InsertionPedestalItem:Item(Settings()),Ammunition {
     }
 
     override fun appendTooltip(
-        stack: ItemStack?,
-        context: TooltipContext?,
-        tooltip: MutableList<Text>?,
-        type: TooltipType?
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
     ) {
-        super.appendTooltip(stack, context, tooltip, type)
-        val rod = stack?.getOrDefault(JRComponents.ROD_INSIDE, ItemStack.EMPTY)
-        if (rod?.isEmpty == true){
-            tooltip?.add(Text.translatable("item.justarod.insertion_pedestal.no_rod"))
+        super.appendTooltip(stack, world, tooltip, context)
+        val rod = stack.getOrDefault(JRComponents.ROD_INSIDE, ItemStack.EMPTY)
+        if (rod.isEmpty){
+            tooltip.add(Text.translatable("item.justarod.insertion_pedestal.no_rod"))
         } else {
-            tooltip?.add(Text.translatable("item.justarod.insertion_pedestal.has_rod",Text.translatable(rod?.item?.translationKey)))
-            rod?.item?.appendTooltip(rod,context,tooltip,type)
+            tooltip.add(Text.translatable("item.justarod.insertion_pedestal.has_rod", Text.translatable(rod.item.translationKey)))
+            rod.item.appendTooltip(rod, world, tooltip, context)
         }
     }
 

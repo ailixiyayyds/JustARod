@@ -17,7 +17,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -450,7 +449,7 @@ public interface Pregnant{
             if (entity.getAttributeValue(EntityAttributes.GENERIC_SCALE) < 1){
                 probability += 0.1f;
             }
-            if (entity.getStatusEffects().stream().anyMatch(effect -> !effect.getEffectType().value().isBeneficial())){
+            if (entity.getStatusEffects().stream().anyMatch(effect -> !effect.getEffectType().isBeneficial())){
                 probability += 0.1f;
             }
             var luck = entity.getAttributeInstance(EntityAttributes.GENERIC_LUCK);
@@ -475,7 +474,7 @@ public interface Pregnant{
             if (entity.getAttributeValue(EntityAttributes.GENERIC_SCALE) < 1){
                 probability += 0.1f;
             }
-            if (entity.getStatusEffects().stream().anyMatch(effect -> !effect.getEffectType().value().isBeneficial())){
+            if (entity.getStatusEffects().stream().anyMatch(effect -> !effect.getEffectType().isBeneficial())){
                 probability += 0.05f;
             }
         }
@@ -1605,7 +1604,7 @@ public interface Pregnant{
             // 开始缓慢...
             pregnant.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 20*10, 0, false, false, true));
             if (pregnant.getRandom().nextInt(300) == 0) {
-                pregnant.sendMessage(MutableText.of(new PlainTextContent.Literal("§a提示：按下")).append(Text.keybind("key.justarod.excrement"))
+                pregnant.sendMessage(Text.literal("§a提示：按下").append(Text.keybind("key.justarod.excrement"))
                         .append(Text.of("§a可以排便哦！")));
             }
         }
@@ -1668,7 +1667,7 @@ public interface Pregnant{
         if (urination > day * 0.5) {
             // 5. 需要提示
             if (pregnant.getRandom().nextInt(300) == 0) {
-                pregnant.sendMessage(MutableText.of(new PlainTextContent.Literal("§e提示：按下"))
+                pregnant.sendMessage(Text.literal("§e提示：按下")
                         .append(Text.keybind("key.justarod.urinate")) // 对应按键
                         .append(Text.of("§e可以排尿哦！")));
             }
