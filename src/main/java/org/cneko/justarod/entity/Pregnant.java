@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import org.cneko.justarod.Justarod;
+import org.cneko.justarod.JRAttributes;
 import org.cneko.justarod.damage.JRDamageTypes;
 import org.cneko.justarod.effect.JREffects;
 import org.cneko.justarod.item.JRComponents;
@@ -444,6 +445,9 @@ public interface Pregnant{
     default float getEctopicPregnancyProbability(){
         float probability = 0.02f;
         if (this instanceof LivingEntity entity){
+            if (entity.getAttributeValue(JRAttributes.Companion.getGENERIC_SCALE()) < 1.0) {
+                probability += 0.1f;
+            }
             if (entity.getStatusEffects().stream().anyMatch(effect -> !effect.getEffectType().isBeneficial())){
                 probability += 0.1f;
             }
@@ -466,6 +470,9 @@ public interface Pregnant{
     default float getHydatidiformMoleProbability(){
         float probability = 0.01f;
         if (this instanceof LivingEntity entity){
+            if (entity.getAttributeValue(JRAttributes.Companion.getGENERIC_SCALE()) < 1.0) {
+                probability += 0.1f;
+            }
             if (entity.getStatusEffects().stream().anyMatch(effect -> !effect.getEffectType().isBeneficial())){
                 probability += 0.05f;
             }
@@ -474,14 +481,14 @@ public interface Pregnant{
     }
     default int calculateBabyCount(LivingEntity target){
         // 获取对方目前的体型
-        double targetScale = 1.0;
+        double targetScale = target.getAttributeBaseValue(JRAttributes.Companion.getGENERIC_SCALE());
         // 计算对方真实体积
         EntityDimensions targetDimensions = target.getDimensions(target.getPose());
         double targetVolume = targetDimensions.width * targetDimensions.height * targetDimensions.height;
         // 真实体积
         double targetRealVolume = targetScale * targetVolume;
         // 获取自己目前的体型
-        double selfScale = 1.0;
+        double selfScale = ((LivingEntity)this).getAttributeValue(JRAttributes.Companion.getGENERIC_SCALE());
         // 自己的体型与(对方体积除以4)相除
         double r = selfScale*selfScale*selfScale / (targetRealVolume / 4);
         // 向上取整
@@ -2177,7 +2184,7 @@ public interface Pregnant{
             if (entity.isPregnant()) return;
 
             // 检测 Scale 属性
-            double currentScale = 1.0;
+            double currentScale = entity.getAttributeValue(JRAttributes.Companion.getGENERIC_SCALE());
             if (currentScale >= entity.getProtogynyScaleThreshold()) {
                 // 触发变性！
                 entity.setUndergoingProtogyny(true);
@@ -2271,6 +2278,12 @@ public interface Pregnant{
                 entity.sendMessage(Text.of("§b彻底的转变完成了！你现在是雄性了。"));
 
                 // 奖励：生命上限提升
+                var scaleAttr = entity.getAttributeInstance(JRAttributes.Companion.getGENERIC_SCALE());
+                if (scaleAttr != null) {
+                    scaleAttr.setBaseValue(Math.min(4.0, scaleAttr.getBaseValue() * 1.05));
+                    entity.calculateDimensions();
+                }
+
                 var healthAttr = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
                 if (healthAttr != null) {
                     healthAttr.setBaseValue(healthAttr.getBaseValue() + 4.0); // +2心

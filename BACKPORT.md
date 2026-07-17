@@ -41,9 +41,10 @@ Completed source groups:
 - Java sources and Mixins now compile and apply on 1.20.1. Development server
   and client startup smoke tests pass through mod initialization.
 
-Minecraft 1.20.1 has no generic jump-strength or scale entity attributes.
-The associated jump/scale modifiers are temporarily inactive until equivalent
-behavioral fallbacks are implemented.
+Minecraft 1.20.1 has no vanilla generic jump-strength or scale entity
+attributes. This branch supplies a tracked JustARod scale attribute for living
+entities and applies it to collision dimensions and vanilla living-entity
+rendering. Jump-nerf effects adjust upward velocity when the entity jumps.
 
 ## License and attribution
 

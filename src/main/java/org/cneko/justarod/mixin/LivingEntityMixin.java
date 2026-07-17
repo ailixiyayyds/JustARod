@@ -1,6 +1,8 @@
 package org.cneko.justarod.mixin;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
@@ -61,6 +63,27 @@ public class LivingEntityMixin implements Insertable {
         DefaultAttributeContainer.Builder builder = cir.getReturnValue();
         builder.add(JRAttributes.Companion.getPLAYER_LUBRICATING());
         builder.add(JRAttributes.Companion.getGENERIC_MAX_POWER());
+        builder.add(JRAttributes.Companion.getGENERIC_SCALE());
+        builder.add(JRAttributes.Companion.getGENERIC_JUMP_STRENGTH());
+    }
+
+    @Inject(method = "jump", at = @At("TAIL"))
+    private void justARod$applyJumpNerf(CallbackInfo ci) {
+        LivingEntity self = (LivingEntity) (Object) this;
+        double multiplier = self.getAttributeValue(JRAttributes.Companion.getGENERIC_JUMP_STRENGTH()) / 0.42;
+        var velocity = self.getVelocity();
+        if (velocity.y > 0.0 && Math.abs(multiplier - 1.0) > 0.0001) {
+            self.setVelocity(velocity.x, velocity.y * multiplier, velocity.z);
+        }
+    }
+
+    @Inject(method = "getDimensions", at = @At("RETURN"), cancellable = true)
+    private void justARod$scaleDimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> cir) {
+        LivingEntity self = (LivingEntity) (Object) this;
+        double scale = self.getAttributeValue(JRAttributes.Companion.getGENERIC_SCALE());
+        if (Math.abs(scale - 1.0) > 0.0001) {
+            cir.setReturnValue(cir.getReturnValue().scaled((float) scale));
+        }
     }
 
     @Inject(method = "damage", at = @At("HEAD"))

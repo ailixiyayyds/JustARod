@@ -29,6 +29,22 @@ class JRAttributes {
                 100.0, 0.0, 1000.0
             ).setTracked(true)
         )
+        val GENERIC_SCALE_ID = Identifier(MODID, "generic.scale")
+        val GENERIC_SCALE: EntityAttribute = register(
+            GENERIC_SCALE_ID,
+            ClampedEntityAttribute(
+                "attribute.name.justarod.generic.scale",
+                1.0, 0.1, 4.0
+            ).setTracked(true)
+        )
+        val GENERIC_JUMP_STRENGTH_ID = Identifier(MODID, "generic.jump_strength")
+        val GENERIC_JUMP_STRENGTH: EntityAttribute = register(
+            GENERIC_JUMP_STRENGTH_ID,
+            ClampedEntityAttribute(
+                "attribute.name.justarod.generic.jump_strength",
+                0.42, 0.0, 32.0
+            ).setTracked(true)
+        )
         fun register(id: Identifier, attribute: EntityAttribute): EntityAttribute {
             return Registry.register(Registries.ATTRIBUTE, id, attribute)
         }

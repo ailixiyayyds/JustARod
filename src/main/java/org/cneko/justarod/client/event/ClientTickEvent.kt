@@ -22,12 +22,13 @@ class ClientTickEvent {
             HudRenderCallback.EVENT.register { context, _ ->
                 val client = MinecraftClient.getInstance()
                 val player = client.player ?: return@register
-                if (player.hasEffect(JREffects.ESTRUS_EFFECT) || client.player!!.hasEffect(JREffects.ORGASM_EFFECT)) {
+                if (player.hasEffect(JREffects.ESTRUS_EFFECT)) {
                     // 粉嫩粉嫩的
                     renderPinkGUI()
                     renderPinkOverlay(context)
                 }
                 if (player.hasEffect(JREffects.ORGASM_EFFECT)) {
+                    renderOrgasmBlackout(context)
                     // 抖起来！！！
                     val intensity = client.window.scaledWidth * (0.00f + Random().nextFloat() * 0.005f)
                     applyScreenShake(context, intensity)
@@ -180,6 +181,17 @@ class ClientTickEvent {
 
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
             RenderSystem.disableBlend()
+        }
+
+        private fun renderOrgasmBlackout(context: DrawContext) {
+            val client = MinecraftClient.getInstance()
+            context.fill(
+                0,
+                0,
+                client.window.scaledWidth,
+                client.window.scaledHeight,
+                0xD9000000.toInt()
+            )
         }
 
 

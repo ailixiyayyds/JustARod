@@ -8,7 +8,12 @@ import net.minecraft.entity.LivingEntity
 class GrowthAgentItem: BaseSyringeItem(Settings()) {
 
     override fun applyEffect(target: LivingEntity) {
-        // Minecraft 1.20.1 has no generic scale attribute.
+        target.getAttributeInstance(org.cneko.justarod.JRAttributes.GENERIC_SCALE)?.let { scale ->
+            if (scale.baseValue < 4.0) {
+                scale.baseValue = (scale.baseValue + 0.1).coerceAtMost(4.0)
+                target.calculateDimensions()
+            }
+        }
     }
 
 }

@@ -2,6 +2,8 @@ package org.cneko.justarod.mixin;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.mob.MobEntity;
@@ -36,6 +38,15 @@ import static org.cneko.justarod.JRAttributes.Companion;
 @SuppressWarnings({"AddedMixinMembersNamePattern", "DataFlowIssue"})
 @Mixin(PlayerEntity.class)
 public abstract class PlayerMixin implements Powerable, Pregnant, BDSMable {
+
+    @Inject(method = "getDimensions", at = @At("RETURN"), cancellable = true)
+    private void justARod$scalePlayerDimensions(EntityPose pose, CallbackInfoReturnable<EntityDimensions> cir) {
+        PlayerEntity self = (PlayerEntity) (Object) this;
+        double scale = self.getAttributeValue(Companion.getGENERIC_SCALE());
+        if (Math.abs(scale - 1.0) > 0.0001) {
+            cir.setReturnValue(cir.getReturnValue().scaled((float) scale));
+        }
+    }
 
     @Unique
     private short slowTick = 10;
